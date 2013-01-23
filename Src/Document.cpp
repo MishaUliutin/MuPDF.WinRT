@@ -96,15 +96,15 @@ unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ bu
 	// Cast to Object^, then to its underlying IInspectable interface.
 	Object^ obj = buffer;
 	Microsoft::WRL::ComPtr<IInspectable> insp(reinterpret_cast<IInspectable*>(obj));
- 
+
 	// Query the IBufferByteAccess interface.
 	Microsoft::WRL::ComPtr<Windows::Storage::Streams::IBufferByteAccess> bufferByteAccess;
-    Utilities::ThrowIfFailed(insp.As(&bufferByteAccess));
- 
-    // Retrieve the buffer data.
-    unsigned char *pixels = nullptr;
-    Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&pixels));
-    return pixels;
+	Utilities::ThrowIfFailed(insp.As(&bufferByteAccess));
+
+	// Retrieve the buffer data.
+	unsigned char *pixels = nullptr;
+	Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&pixels));
+	return pixels;
 }
 
 Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
