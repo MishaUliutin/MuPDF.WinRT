@@ -1,37 +1,37 @@
 ﻿#pragma once
 
-extern "C" {
-	#include "fitz.h"
-	#include "mupdf.h"
-}
+#include "MuPDFDoc.h"
 
 namespace MuPDFWinRT
 {
 	public enum class DocumentType : int { PDF, XPS, CBZ };
 
+	public value struct PointF
+	{
+		float32 X;
+		float32 Y;
+	};
+
 	public ref class Document sealed
 	{    
 	private:
-		fz_context *m_context;
-		fz_document *m_document;
+		MuPDFDoc *m_doc;
 		Windows::Storage::Streams::IBuffer^ m_buffer;
 		Document();
 		void Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType);
-		void InitContext();
-		void InitDocument(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType);
-		fz_stream *OpenStream(Windows::Storage::Streams::IBuffer^ buffer);
 		unsigned char *GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer);
 		const char *GetMIMEType(DocumentType documentType);
 		void GotoPage(int page);
 	public:
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType);
 		virtual ~Document();
+		PointF GetPageSize(int pageNumber);
 
 		property int PageCount
 		{
 			int get()
 			{
-				return fz_count_pages(m_document);
+				return m_doc->GetPageCount();
 			}
 		}
 	};

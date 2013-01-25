@@ -8,10 +8,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Document.cpp" />
-    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="..\Src\Utilities.cpp" />
+    <ClCompile Include="..\Src\MuPDFDoc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Document.h" />
-    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="..\Src\Utilities.h" />
+    <ClInclude Include="..\Src\MuPDFDoc.h" />
   </ItemGroup>
 </Project>

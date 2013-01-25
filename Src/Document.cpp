@@ -2,63 +2,36 @@
 #include <Inspectable.h>
 #include <client.h>
 #include <Robuffer.h>
+
 #include "Document.h"
 #include "Utilities.h"
 
 using namespace MuPDFWinRT;
-using namespace Platform;
 
 Document::Document()
-	: m_context(nullptr), m_document(nullptr), m_buffer(nullptr)
+	: m_doc(nullptr), m_buffer(nullptr)
 {
 }
 
 Document::~Document()
 {
-	if (m_document)
+	if (m_doc)
 	{
-		fz_close_document(m_document);
-		m_document = nullptr;
+		delete m_doc;
+		m_doc = nullptr;
 	}
 	if (m_buffer)
 	{
 		m_buffer = nullptr;
 	}
-	if (m_context)
-	{
-		fz_free_context(m_context);
-		m_context = nullptr;
-	}
 }
 
 void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
 {
-	InitContext();
-	InitDocument(buffer, documentType);
-}
-
-void Document::InitContext()
-{
-	m_context = fz_new_context(NULL, NULL, FZ_STORE_DEFAULT);
-	if (!m_context)
-	{
-		throw ref new Platform::OutOfMemoryException();
-	}
-}
-
-void Document::InitDocument(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
-{
 	m_buffer = buffer;
-	fz_stream *stream = OpenStream(buffer);
+	unsigned char *data = GetPointerToData(buffer);
 	const char *type = GetMIMEType(documentType);
-	fz_try(m_context)
-	{
-		m_document = fz_open_document_with_stream(m_context, type, stream);
-	}
-	fz_catch(m_context)
-	{
-		throw ref new Platform::InvalidArgumentException(ref new Platform::String(L"buffer"));
-	}
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, &m_doc));
 }
 
 const char *Document::GetMIMEType(DocumentType documentType)
@@ -76,21 +49,6 @@ const char *Document::GetMIMEType(DocumentType documentType)
 	}
 }
 
-fz_stream *Document::OpenStream(Windows::Storage::Streams::IBuffer^ buffer)
-{
-	unsigned char *data = GetPointerToData(buffer);
-	fz_stream *stream = nullptr;
-	fz_try(m_context)
-	{
-		stream = fz_open_memory(m_context, data, buffer->Length);
-	}
-	fz_catch(m_context)
-	{
-		throw ref new Platform::OutOfMemoryException(ref new Platform::String(L"fz_open_memory"));
-	}
-	return stream;
-}
-
 unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer)
 {
 	// Cast to Object^, then to its underlying IInspectable interface.
@@ -102,9 +60,9 @@ unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ bu
 	Utilities::ThrowIfFailed(insp.As(&bufferByteAccess));
 
 	// Retrieve the buffer data.
-	unsigned char *pixels = nullptr;
-	Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&pixels));
-	return pixels;
+	unsigned char *data = nullptr;
+	Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&data));
+	return data;
 }
 
 Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
@@ -118,3 +76,11 @@ Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentT
 	return document;
 }
 
+PointF Document::GetPageSize(int pageNumber)
+{
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
+	PointF size;
+	size.X = m_doc->GetPageWidth();
+	size.Y = m_doc->GetPageHeight();
+	return size;
+}
