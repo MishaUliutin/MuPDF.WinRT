@@ -190,8 +190,9 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 	fz_try(m_context)
 	{
 		pageCache->page = fz_load_page(m_document, pageCache->number);
-		float zoom = m_resolution / 72;
 		pageCache->mediaBox = fz_bound_page(m_document, pageCache->page);
+		// fz_bound_page determine the size of a page at 72 dpi.
+		float zoom = m_resolution / 72;
 		fz_matrix ctm = fz_scale(zoom, zoom);
 		fz_bbox bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
 		pageCache->width = bbox.x1-bbox.x0;

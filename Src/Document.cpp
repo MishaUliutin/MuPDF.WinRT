@@ -76,10 +76,10 @@ Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentT
 	return document;
 }
 
-PointF Document::GetPageSize(int pageNumber)
+Point Document::GetPageSize(int pageNumber)
 {
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	PointF size;
+	Point size;
 	size.X = m_doc->GetPageWidth();
 	size.Y = m_doc->GetPageHeight();
 	return size;

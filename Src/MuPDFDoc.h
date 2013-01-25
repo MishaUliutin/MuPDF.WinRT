@@ -46,6 +46,6 @@ public:
 	HRESULT GotoPage(int pageNumber);
 	HRESULT DrawPage(unsigned char *bitmap, int pageW, int pageH, int patchX, int patchY, int patchW, int patchH);
 	inline int GetPageCount() { return fz_count_pages(m_document); }
-	inline float GetPageWidth() { return m_pages[m_currentPage].width; }
-	inline float GetPageHeight() { return m_pages[m_currentPage].height; }
+	inline int GetPageWidth() { return m_pages[m_currentPage].width; }
+	inline int GetPageHeight() { return m_pages[m_currentPage].height; }
 };

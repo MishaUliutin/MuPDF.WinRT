@@ -6,10 +6,10 @@ namespace MuPDFWinRT
 {
 	public enum class DocumentType : int { PDF, XPS, CBZ };
 
-	public value struct PointF
+	public value struct Point
 	{
-		float32 X;
-		float32 Y;
+		int32 X;
+		int32 Y;
 	};
 
 	public ref class Document sealed
@@ -25,7 +25,7 @@ namespace MuPDFWinRT
 	public:
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType);
 		virtual ~Document();
-		PointF GetPageSize(int pageNumber);
+		Point GetPageSize(int pageNumber);
 
 		property int PageCount
 		{
