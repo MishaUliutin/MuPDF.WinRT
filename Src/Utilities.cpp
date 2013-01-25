@@ -5,8 +5,8 @@ using namespace Platform;
 
 void Utilities::ThrowIfFailed(HRESULT hr)
 {
-    if (FAILED(hr))
-    {
-        throw Exception::CreateException(hr);
-    }
+	if (FAILED(hr))
+	{
+		throw Exception::CreateException(hr);
+	}
 }
