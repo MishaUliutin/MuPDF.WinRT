@@ -30,7 +30,7 @@ private:
 	int m_currentPage;
 	int m_resolution;
 	PageCache m_pages[NUM_CACHE];
-	MuPDFDoc();
+	MuPDFDoc(int resolution);
 	HRESULT Init(unsigned char *buffer, int bufferLen, const char *mimeType);
 	HRESULT InitContext();
 	HRESULT InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType);
@@ -39,13 +39,16 @@ private:
 	void ClearPages();
 	int FindPageInCache(int pageNumber);
 	int GetPageCacheIndex(int pageNumber);
-	void ClearHQPages();
+//	void ClearHQPages();
 public:
-	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, MuPDFDoc **obj);
+	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj);
 	~MuPDFDoc(void);
 	HRESULT GotoPage(int pageNumber);
-	HRESULT DrawPage(unsigned char *bitmap, int pageW, int pageH, int patchX, int patchY, int patchW, int patchH);
+	HRESULT DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert);
 	inline int GetPageCount() { return fz_count_pages(m_document); }
-	inline int GetPageWidth() { return m_pages[m_currentPage].width; }
-	inline int GetPageHeight() { return m_pages[m_currentPage].height; }
+	inline bool JavaScriptSupported() { return fz_javascript_supported() != 0; }
+	inline bool NeedsPassword() { return fz_needs_password(m_document) != 0; }
+	bool AuthenticatePassword(char *password);
+	int GetPageWidth();
+	int GetPageHeight();
 };

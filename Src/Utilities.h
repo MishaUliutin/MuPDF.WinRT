@@ -2,9 +2,13 @@
 
 #include <Winerror.h>
 
-class Utilities
+namespace Utilities
 {
-public:
-	static void ThrowIfFailed(HRESULT hr);
-};
-
+	inline void ThrowIfFailed(HRESULT hr)
+	{
+		if (FAILED(hr))
+		{
+			throw Platform::Exception::CreateException(hr);
+		}
+	}
+}

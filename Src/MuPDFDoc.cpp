@@ -3,8 +3,8 @@
 #include "MuPDFDoc.h"
 
 
-MuPDFDoc::MuPDFDoc()
-	: m_context(nullptr), m_document(nullptr), m_resolution(160), m_currentPage(-1)
+MuPDFDoc::MuPDFDoc(int resolution)
+	: m_context(nullptr), m_document(nullptr), m_resolution(resolution), m_currentPage(-1)
 {
 	for(int i = 0; i < NUM_CACHE; i++)
 	{
@@ -18,9 +18,9 @@ MuPDFDoc::MuPDFDoc()
 	}
 }
 
-HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, MuPDFDoc **obj)
+HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj)
 {
-	MuPDFDoc *doc = new MuPDFDoc();
+	MuPDFDoc *doc = new MuPDFDoc(resolution);
 	HRESULT result = doc->Init(buffer, bufferLen, mimeType);
 	if (FAILED(result))
 	{
@@ -192,7 +192,7 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 		pageCache->page = fz_load_page(m_document, pageCache->number);
 		pageCache->mediaBox = fz_bound_page(m_document, pageCache->page);
 		// fz_bound_page determine the size of a page at 72 dpi.
-		float zoom = m_resolution / 72;
+		float zoom = m_resolution / 72.0;
 		fz_matrix ctm = fz_scale(zoom, zoom);
 		fz_bbox bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
 		pageCache->width = bbox.x1-bbox.x0;
@@ -205,16 +205,110 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 	return S_OK;
 }
 
-void MuPDFDoc::ClearHQPages()
+int MuPDFDoc::GetPageWidth()
 {
-	for (int i = 0; i < NUM_CACHE; i++) 
-	{
-		fz_free_page(m_document, m_pages[i].hqPage);
-		m_pages[i].hqPage = NULL;
-	}
+	return m_pages[m_currentPage].width;
 }
 
-HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
+int MuPDFDoc::GetPageHeight()
 {
-	return E_NOTIMPL;
+	return m_pages[m_currentPage].height;
+}
+
+bool MuPDFDoc::AuthenticatePassword(char *password)
+{
+	return fz_authenticate_password(m_document, password) != 0;
+}
+
+//void MuPDFDoc::ClearHQPages()
+//{
+//	for (int i = 0; i < NUM_CACHE; i++) 
+//	{
+//		fz_free_page(m_document, m_pages[i].hqPage);
+//		m_pages[i].hqPage = NULL;
+//	}
+//}
+
+HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert)
+{
+	fz_device *dev = NULL;
+	fz_var(dev);
+	PageCache *pageCache = &m_pages[m_currentPage];
+	fz_try(m_context)
+	{
+		fz_interactive *idoc = fz_interact(m_document);
+		// Call fz_update_page now to ensure future calls yield the
+		// changes from the current state
+		if (idoc)
+			fz_update_page(idoc, pageCache->page);
+
+		if (!pageCache->pageList)
+		{
+			/* Render to list */
+			pageCache->pageList = fz_new_display_list(m_context);
+			dev = fz_new_list_device(m_context, pageCache->pageList);
+			fz_run_page_contents(m_document, pageCache->page, dev, fz_identity, NULL);
+		}
+		if (!pageCache->annotList)
+		{
+			if (dev)
+			{
+				fz_free_device(dev);
+				dev = NULL;
+			}
+			pageCache->annotList = fz_new_display_list(m_context);
+			dev = fz_new_list_device(m_context, pageCache->annotList);
+			for (fz_annot *annot = fz_first_annot(m_document, pageCache->page); annot; annot = fz_next_annot(m_document, annot))
+				fz_run_annot(m_document, pageCache->page, annot, dev, fz_identity, NULL);
+		}
+		fz_bbox rect;
+		fz_pixmap *pixmap = NULL;
+		fz_var(pixmap);
+		rect.x0 = x;
+		rect.y0 = y;
+		rect.x1 = x + width;
+		rect.y1 = y + height;
+		pixmap = fz_new_pixmap_with_bbox_and_data(m_context, fz_device_rgb, rect, bitmap);
+		if (!pageCache->pageList && !pageCache->annotList)
+		{
+			fz_clear_pixmap_with_value(m_context, pixmap, 0xd0);
+			break;
+		}
+		fz_clear_pixmap_with_value(m_context, pixmap, 0xff);
+		//
+		float zoom = m_resolution / 72.0;
+		fz_matrix ctm = fz_scale(zoom, zoom);
+		fz_bbox bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
+		/* Now, adjust ctm so that it would give the correct page width
+		 * heights. */
+		float xscale = (float)width/(float)(bbox.x1-bbox.x0);
+		float yscale = (float)height/(float)(bbox.y1-bbox.y0);
+		ctm = fz_concat(ctm, fz_scale(xscale, yscale));
+		bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
+		if (dev)
+		{
+			fz_free_device(dev);
+			dev = NULL;
+		}
+		dev = fz_new_draw_device(m_context, pixmap);
+		if (pageCache->pageList)
+			fz_run_display_list(pageCache->pageList, dev, ctm, bbox, NULL);
+		if (pageCache->annotList)
+			fz_run_display_list(pageCache->annotList, dev, ctm, bbox, NULL);
+		fz_free_device(dev);
+		dev = NULL;
+		if (invert)
+			fz_invert_pixmap(m_context, pixmap);
+		fz_drop_pixmap(m_context, pixmap);
+	}
+	fz_catch(m_context)
+	{
+		if (dev)
+		{
+			fz_free_device(dev);
+			dev = NULL;
+		}
+		return E_FAIL;
+	}
+	return S_OK;
 }

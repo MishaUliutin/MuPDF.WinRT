@@ -127,7 +127,6 @@
   <ItemGroup>
     <ClCompile Include="..\Src\Document.cpp" />
     <ClCompile Include="..\Src\MuPDFDoc.cpp" />
-    <ClCompile Include="..\Src\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Document.h" />

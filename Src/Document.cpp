@@ -2,6 +2,7 @@
 #include <Inspectable.h>
 #include <client.h>
 #include <Robuffer.h>
+#include <memory>
 
 #include "Document.h"
 #include "Utilities.h"
@@ -26,12 +27,12 @@ Document::~Document()
 	}
 }
 
-void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
+void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution)
 {
 	m_buffer = buffer;
 	unsigned char *data = GetPointerToData(buffer);
 	const char *type = GetMIMEType(documentType);
-	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, &m_doc));
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, &m_doc));
 }
 
 const char *Document::GetMIMEType(DocumentType documentType)
@@ -65,15 +66,57 @@ unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ bu
 	return data;
 }
 
-Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType)
+Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution)
 {
 	if (!buffer)
 	{
 		throw ref new Platform::InvalidArgumentException(L"buffer");
 	}
 	Document^ document = ref new Document();
-	document->Init(buffer, documentType);
+	document->Init(buffer, documentType, resolution);
 	return document;
+}
+
+Platform::Boolean Document::AuthenticatePassword(Platform::String^ password)
+{
+	int ansiLength =  WideCharToMultiByte(
+		CP_ACP, 
+		0, 
+		password->Data(), 
+		-1, 
+		nullptr, 
+		0, 
+		nullptr, 
+		nullptr);
+	if (ansiLength == 0)
+		throw ref new Platform::FailureException();
+	std::unique_ptr<char[]> ansiPassword(new char[ansiLength]);
+	ansiLength =  WideCharToMultiByte(
+		CP_ACP, 
+		0, 
+		password->Data(), 
+		-1, 
+		ansiPassword.get(),
+		ansiLength,
+		nullptr, 
+		nullptr);
+	if (ansiLength == 0)
+		throw ref new Platform::FailureException();
+	return m_doc->AuthenticatePassword(ansiPassword.get());
+}
+
+void Document::DrawPage(
+	int32 pageNumber, 
+	Windows::Storage::Streams::IBuffer^ bitmap, 
+	int32 x, 
+	int32 y, 
+	int32 width, 
+	int32 height,
+	Platform::Boolean invert)
+{
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
+	auto buffer = GetPointerToData(bitmap);
+	Utilities::ThrowIfFailed(m_doc->DrawPage(buffer, x, y, width, height, invert));
 }
 
 Point Document::GetPageSize(int pageNumber)
