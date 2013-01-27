@@ -9,10 +9,12 @@
   <ItemGroup>
     <ClCompile Include="..\Src\Document.cpp" />
     <ClCompile Include="..\Src\MuPDFDoc.cpp" />
+    <ClCompile Include="..\Src\OutlineItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Document.h" />
     <ClInclude Include="..\Src\Utilities.h" />
     <ClInclude Include="..\Src\MuPDFDoc.h" />
+    <ClInclude Include="..\Src\OutlineItem.h" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <memory>
+#include "OutlineItem.h"
 #include "MuPDFDoc.h"
 
 namespace MuPDFWinRT
@@ -22,6 +24,7 @@ namespace MuPDFWinRT
 		unsigned char *GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer);
 		const char *GetMIMEType(DocumentType documentType);
 		void GotoPage(int page);
+		MuPDFWinRT::OutlineItem^ CreateOutlineItem(std::shared_ptr<Outlineitem> item);
 	public:
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution);
 		virtual ~Document();
@@ -35,10 +38,18 @@ namespace MuPDFWinRT
 			int32 width, 
 			int32 height,
 			Platform::Boolean invert);
-
+		void UpdatePage(
+			int32 pageNumber, 
+			Windows::Storage::Streams::IBuffer^ bitmap, 
+			int32 x, 
+			int32 y, 
+			int32 width, 
+			int32 height,
+			Platform::Boolean invert);
+		Windows::Foundation::Collections::IVector<MuPDFWinRT::OutlineItem^>^ GetOutline();
 		property int32 PageCount
 		{
-			int get()
+			int32 get()
 			{
 				return m_doc->GetPageCount();
 			}
@@ -55,6 +66,13 @@ namespace MuPDFWinRT
 			Platform::Boolean get()
 			{
 				return m_doc->JavaScriptSupported();
+			}
+		}
+		property Platform::Boolean HasOutline
+		{
+			Platform::Boolean get()
+			{
+				return m_doc->HasOutline();
 			}
 		}
 	};

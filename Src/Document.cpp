@@ -2,7 +2,9 @@
 #include <Inspectable.h>
 #include <client.h>
 #include <Robuffer.h>
+#include <collection.h>
 #include <memory>
+#include <vector>
 
 #include "Document.h"
 #include "Utilities.h"
@@ -119,6 +121,19 @@ void Document::DrawPage(
 	Utilities::ThrowIfFailed(m_doc->DrawPage(buffer, x, y, width, height, invert));
 }
 
+void Document::UpdatePage(
+	int32 pageNumber, 
+	Windows::Storage::Streams::IBuffer^ bitmap, 
+	int32 x, 
+	int32 y, 
+	int32 width, 
+	int32 height,
+	Platform::Boolean invert)
+{
+	auto buffer = GetPointerToData(bitmap);
+	Utilities::ThrowIfFailed(m_doc->UpdatePage(pageNumber, buffer, x, y, width, height, invert));
+}
+
 Point Document::GetPageSize(int pageNumber)
 {
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
@@ -126,4 +141,40 @@ Point Document::GetPageSize(int pageNumber)
 	size.X = m_doc->GetPageWidth();
 	size.Y = m_doc->GetPageHeight();
 	return size;
+}
+
+Windows::Foundation::Collections::IVector<MuPDFWinRT::OutlineItem^>^ Document::GetOutline()
+{
+	auto items = m_doc->GetOutline();
+	auto outlineItems = ref new Platform::Collections::Vector<MuPDFWinRT::OutlineItem^>();
+	for(size_t i = 0; i < items->size(); i++)
+	{
+		auto outlineItem = CreateOutlineItem(items->at(i));
+		outlineItems->InsertAt(i, outlineItem);
+	}
+	return outlineItems;
+}
+
+MuPDFWinRT::OutlineItem^ Document::CreateOutlineItem(std::shared_ptr<Outlineitem> item)
+{
+	int length = MultiByteToWideChar(
+		CP_UTF8, 
+		0, 
+		item->title.get(), 
+		-1, 
+		nullptr, 
+		0);
+	if (length == 0)
+		throw ref new Platform::FailureException();
+	std::unique_ptr<wchar_t[]> title(new wchar_t[length]);
+	length =  MultiByteToWideChar(
+		CP_UTF8, 
+		0, 
+		item->title.get(), 
+		-1, 
+		title.get(),
+		length);
+	if (length == 0)
+		throw ref new Platform::FailureException();
+	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, ref new Platform::String(title.get()));
 }
