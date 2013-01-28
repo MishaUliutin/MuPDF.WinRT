@@ -2,7 +2,6 @@
 
 #include "MuPDFDoc.h"
 
-
 MuPDFDoc::MuPDFDoc(int resolution)
 	: m_context(nullptr), m_document(nullptr), m_resolution(resolution), m_currentPage(-1)
 {
@@ -444,6 +443,15 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 //	return count;
 //}
 //
+
+static std::unique_ptr<char[]> CopyUniqueStr(char *str)
+{
+	size_t len = strlen(str);
+	std::unique_ptr<char[]> copyStr(new char[len + 1]);
+	strcpy_s(copyStr.get(), len + 1, str);
+	return copyStr;
+}
+
 int MuPDFDoc::FillOutline(
 	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, 
 	int position, 
@@ -460,10 +468,7 @@ int MuPDFDoc::FillOutline(
 				std::shared_ptr<Outlineitem> item(new Outlineitem());
 				item->level = level;
 				item->pageNumber = pageNumber;
-				size_t len = strlen(outline->title);
-				std::unique_ptr<char[]> title(new char[len + 1]);
-				strcpy(title.get(), outline->title);
-				item->title = std::move(title);
+				item->title = CopyUniqueStr(outline->title);
 				items->push_back(item); 
 				position++;
 			}
@@ -483,7 +488,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline(
 	return items;
 }
 
-std::shared_ptr<MuPDFDocLink> CreateLink(const fz_rect &rect)
+static std::shared_ptr<MuPDFDocLink> CreateLink(const fz_rect &rect)
 {
 	std::shared_ptr<MuPDFDocLink> docLink(new MuPDFDocLink());
 	docLink->left = rect.x0;
@@ -493,7 +498,7 @@ std::shared_ptr<MuPDFDocLink> CreateLink(const fz_rect &rect)
 	return docLink;
 }
 
-std::shared_ptr<MuPDFDocLink> CreateInternalLink(const fz_link *link, fz_rect &rect)
+static std::shared_ptr<MuPDFDocLink> CreateInternalLink(const fz_link *link, fz_rect &rect)
 {
 	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
 	docLink->type = INTERNAL;
@@ -501,16 +506,13 @@ std::shared_ptr<MuPDFDocLink> CreateInternalLink(const fz_link *link, fz_rect &r
 	return docLink;
 }
 
-std::shared_ptr<MuPDFDocLink> CreateRemoteLink(const fz_link *link, fz_rect &rect)
+static std::shared_ptr<MuPDFDocLink> CreateRemoteLink(const fz_link *link, fz_rect &rect)
 {
 	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
 	docLink->type = REMOTE;
 	docLink->remotePageNumber = link->dest.ld.gotor.page;
 	docLink->newWindow = link->dest.ld.gotor.new_window != 0 ? true : false;
-	size_t len = strlen(link->dest.ld.gotor.file_spec);
-	std::unique_ptr<char[]> fileSpec(new char[len + 1]);
-	strcpy(fileSpec.get(), link->dest.ld.gotor.file_spec);
-	docLink->fileSpec = std::move(fileSpec);
+	docLink->fileSpec = CopyUniqueStr(link->dest.ld.gotor.file_spec);
 	return docLink;
 }
 
@@ -518,10 +520,7 @@ std::shared_ptr<MuPDFDocLink> CreateURILink(const fz_link *link, fz_rect &rect)
 {
 	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
 	docLink->type = URI;
-	size_t len = strlen(link->dest.ld.uri.uri);
-	std::unique_ptr<char[]> uri(new char[len + 1]);
-	strcpy(uri.get(), link->dest.ld.uri.uri);
-	docLink->uri = std::move(uri);	
+	docLink->uri = CopyUniqueStr(link->dest.ld.uri.uri);	
 	return docLink;
 }
 

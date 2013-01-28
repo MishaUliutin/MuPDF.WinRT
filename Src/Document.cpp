@@ -157,24 +157,6 @@ Windows::Foundation::Collections::IVector<MuPDFWinRT::OutlineItem^>^ Document::G
 
 MuPDFWinRT::OutlineItem^ Document::CreateOutlineItem(std::shared_ptr<Outlineitem> item)
 {
-	int length = MultiByteToWideChar(
-		CP_UTF8, 
-		0, 
-		item->title.get(), 
-		-1, 
-		nullptr, 
-		0);
-	if (length == 0)
-		throw ref new Platform::FailureException();
-	std::unique_ptr<wchar_t[]> title(new wchar_t[length]);
-	length =  MultiByteToWideChar(
-		CP_UTF8, 
-		0, 
-		item->title.get(), 
-		-1, 
-		title.get(),
-		length);
-	if (length == 0)
-		throw ref new Platform::FailureException();
-	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, ref new Platform::String(title.get()));
+	auto title = Utilities::ConvertUTF8ToString(item->title.get());
+	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, title);
 }

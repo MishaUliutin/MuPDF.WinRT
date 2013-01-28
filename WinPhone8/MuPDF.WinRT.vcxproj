@@ -64,6 +64,7 @@
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
       <AdditionalIncludeDirectories>C:\OpenSource\mupdf\fitz;C:\OpenSource\mupdf\pdf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,11 +127,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Document.cpp" />
+    <ClCompile Include="..\Src\LinkInfo.cpp" />
+    <ClCompile Include="..\Src\LinkInfoInternal.cpp" />
+    <ClCompile Include="..\Src\LinkInfoVisitor.cpp" />
     <ClCompile Include="..\Src\MuPDFDoc.cpp" />
     <ClCompile Include="..\Src\OutlineItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Document.h" />
+    <ClInclude Include="..\Src\LinkInfo.h" />
+    <ClInclude Include="..\Src\LinkInfoInternal.h" />
+    <ClInclude Include="..\Src\LinkInfoVisitor.h" />
     <ClInclude Include="..\Src\MuPDFDoc.h" />
     <ClInclude Include="..\Src\OutlineItem.h" />
     <ClInclude Include="..\Src\Utilities.h" />

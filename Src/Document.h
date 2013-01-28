@@ -14,6 +14,14 @@ namespace MuPDFWinRT
 		int32 Y;
 	};
 
+	public value struct RectF
+	{
+		float32 Left;
+		float32 Top;
+		float32 Right;
+		float32 Bottom;
+	};
+
 	public ref class Document sealed
 	{    
 	private:
