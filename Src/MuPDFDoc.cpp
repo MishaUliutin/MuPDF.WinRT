@@ -460,7 +460,7 @@ int MuPDFDoc::FillOutline(
 				std::shared_ptr<Outlineitem> item(new Outlineitem());
 				item->level = level;
 				item->pageNumber = pageNumber;
-				int len = strlen(outline->title);
+				size_t len = strlen(outline->title);
 				std::unique_ptr<char[]> title(new char[len + 1]);
 				strcpy(title.get(), outline->title);
 				item->title = std::move(title);
@@ -468,7 +468,7 @@ int MuPDFDoc::FillOutline(
 				position++;
 			}
 		}
-		position = FillOutline(items, position, outline->down, level+1);
+		position = FillOutline(items, position, outline->down, level + 1);
 		if (position < 0) 
 			return -1;
 		outline = outline->next;
@@ -481,4 +481,59 @@ std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline(
 	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items(new std::vector<std::shared_ptr<Outlineitem>>());
 	FillOutline(items, 0, m_outline, 0);
 	return items;
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> MuPDFDoc::GetLinks()
+{
+	PageCache *pageCache = &m_pages[m_currentPage];
+	std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> links(new std::vector<std::shared_ptr<MuPDFDocLink>>());
+	float zoom = m_resolution / 72.0;
+	fz_matrix ctm = fz_scale(zoom, zoom);
+	fz_link* list = fz_load_links(m_document, pageCache->page);
+	for(fz_link* link = list; link; link = link->next)
+	{
+		fz_rect rect = fz_transform_rect(ctm, link->rect);
+		std::shared_ptr<MuPDFDocLink> docLink(new MuPDFDocLink());
+		docLink->left = rect.x0;
+		docLink->top = rect.y0;
+		docLink->right = rect.x1;
+		docLink->bottom = rect.y1;
+		switch (link->dest.kind)
+		{
+		case FZ_LINK_GOTO:
+		{
+			docLink->type = INTERNAL;
+			docLink->internalPageNumber = link->dest.ld.gotor.page;
+			break;
+		}
+
+		case FZ_LINK_GOTOR:
+		{
+			docLink->type = REMOTE;
+			docLink->remotePageNumber = link->dest.ld.gotor.page;
+			docLink->newWindow = link->dest.ld.gotor.new_window;
+			size_t len = strlen(link->dest.ld.gotor.file_spec);
+			std::unique_ptr<char[]> fileSpec(new char[len + 1]);
+			strcpy(fileSpec.get(), link->dest.ld.gotor.file_spec);
+			docLink->fileSpec = std::move(fileSpec);
+			break;
+		}
+
+		case FZ_LINK_URI:
+		{
+			docLink->type = URI;
+			size_t len = strlen(link->dest.ld.uri.uri);
+			std::unique_ptr<char[]> uri(new char[len + 1]);
+			strcpy(uri.get(), link->dest.ld.uri.uri);
+			docLink->uri = std::move(uri);	
+			break;
+		}
+
+		default:
+			continue;
+		}
+		links->push_back(docLink);
+	}
+	fz_drop_link(m_context, list);
+	return links;
 }

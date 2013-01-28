@@ -33,6 +33,25 @@ typedef struct
 	int pageNumber;
 } Outlineitem;
 
+enum MuPDFDocLinkType { INTERNAL, URI, REMOTE };
+
+typedef struct
+{
+	MuPDFDocLinkType type;
+	float left; 
+	float top;
+	float right; 
+	float bottom;
+	// URI
+	std::unique_ptr<char[]> uri;
+	// INTERNAL
+	int internalPageNumber;
+	// REMOTE
+	std::unique_ptr<char[]> fileSpec;
+	int remotePageNumber;
+	bool newWindow;	
+} MuPDFDocLink;
+
 class MuPDFDoc
 {
 private:
@@ -68,4 +87,5 @@ public:
 	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> GetOutline();
 	int GetPageWidth();
 	int GetPageHeight();
+	std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> GetLinks();
 };
