@@ -483,6 +483,48 @@ std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline(
 	return items;
 }
 
+MuPDFDocLink* CreateLink(const fz_rect &rect)
+{
+	MuPDFDocLink *docLink = new MuPDFDocLink();
+	docLink->left = rect.x0;
+	docLink->top = rect.y0;
+	docLink->right = rect.x1;
+	docLink->bottom = rect.y1;
+	return docLink;
+}
+
+std::shared_ptr<MuPDFDocLink> CreateInternalLink(const fz_link *link, fz_rect &rect)
+{
+	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
+	docLink->type = INTERNAL;
+	docLink->internalPageNumber = link->dest.ld.gotor.page;
+	return docLink;
+}
+
+std::shared_ptr<MuPDFDocLink> CreateRemoteLink(const fz_link *link, fz_rect &rect)
+{
+	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
+	docLink->type = REMOTE;
+	docLink->remotePageNumber = link->dest.ld.gotor.page;
+	docLink->newWindow = link->dest.ld.gotor.new_window != 0 ? true : false;
+	size_t len = strlen(link->dest.ld.gotor.file_spec);
+	std::unique_ptr<char[]> fileSpec(new char[len + 1]);
+	strcpy(fileSpec.get(), link->dest.ld.gotor.file_spec);
+	docLink->fileSpec = std::move(fileSpec);
+	return docLink;
+}
+
+std::shared_ptr<MuPDFDocLink> CreateURILink(const fz_link *link, fz_rect &rect)
+{
+	std::shared_ptr<MuPDFDocLink> docLink(CreateLink(rect));
+	docLink->type = URI;
+	size_t len = strlen(link->dest.ld.uri.uri);
+	std::unique_ptr<char[]> uri(new char[len + 1]);
+	strcpy(uri.get(), link->dest.ld.uri.uri);
+	docLink->uri = std::move(uri);	
+	return docLink;
+}
+
 std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> MuPDFDoc::GetLinks()
 {
 	PageCache *pageCache = &m_pages[m_currentPage];
@@ -493,39 +535,24 @@ std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> MuPDFDoc::GetLinks()
 	for(fz_link* link = list; link; link = link->next)
 	{
 		fz_rect rect = fz_transform_rect(ctm, link->rect);
-		std::shared_ptr<MuPDFDocLink> docLink(new MuPDFDocLink());
-		docLink->left = rect.x0;
-		docLink->top = rect.y0;
-		docLink->right = rect.x1;
-		docLink->bottom = rect.y1;
+		std::shared_ptr<MuPDFDocLink> docLink;
 		switch (link->dest.kind)
 		{
 		case FZ_LINK_GOTO:
 		{
-			docLink->type = INTERNAL;
-			docLink->internalPageNumber = link->dest.ld.gotor.page;
+			docLink = CreateInternalLink(link, rect);
 			break;
 		}
 
 		case FZ_LINK_GOTOR:
 		{
-			docLink->type = REMOTE;
-			docLink->remotePageNumber = link->dest.ld.gotor.page;
-			docLink->newWindow = link->dest.ld.gotor.new_window;
-			size_t len = strlen(link->dest.ld.gotor.file_spec);
-			std::unique_ptr<char[]> fileSpec(new char[len + 1]);
-			strcpy(fileSpec.get(), link->dest.ld.gotor.file_spec);
-			docLink->fileSpec = std::move(fileSpec);
+			docLink = CreateRemoteLink(link, rect);
 			break;
 		}
 
 		case FZ_LINK_URI:
 		{
-			docLink->type = URI;
-			size_t len = strlen(link->dest.ld.uri.uri);
-			std::unique_ptr<char[]> uri(new char[len + 1]);
-			strcpy(uri.get(), link->dest.ld.uri.uri);
-			docLink->uri = std::move(uri);	
+			docLink = CreateURILink(link, rect);
 			break;
 		}
 
