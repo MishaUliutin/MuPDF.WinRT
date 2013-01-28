@@ -483,9 +483,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline(
 	return items;
 }
 
-MuPDFDocLink* CreateLink(const fz_rect &rect)
+std::shared_ptr<MuPDFDocLink> CreateLink(const fz_rect &rect)
 {
-	MuPDFDocLink *docLink = new MuPDFDocLink();
+	std::shared_ptr<MuPDFDocLink> docLink(new MuPDFDocLink());
 	docLink->left = rect.x0;
 	docLink->top = rect.y0;
 	docLink->right = rect.x1;
