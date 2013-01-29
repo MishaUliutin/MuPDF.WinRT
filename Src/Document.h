@@ -3,6 +3,8 @@
 #include <memory>
 #include "OutlineItem.h"
 #include "MuPDFDoc.h"
+#include "LinkInfo.h"
+#include "RectF.h"
 
 namespace MuPDFWinRT
 {
@@ -12,14 +14,6 @@ namespace MuPDFWinRT
 	{
 		int32 X;
 		int32 Y;
-	};
-
-	public value struct RectF
-	{
-		float32 Left;
-		float32 Top;
-		float32 Right;
-		float32 Bottom;
 	};
 
 	public ref class Document sealed
@@ -32,7 +26,8 @@ namespace MuPDFWinRT
 		unsigned char *GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer);
 		const char *GetMIMEType(DocumentType documentType);
 		void GotoPage(int page);
-		MuPDFWinRT::OutlineItem^ CreateOutlineItem(std::shared_ptr<Outlineitem> item);
+		OutlineItem^ CreateOutlineItem(std::shared_ptr<Outlineitem> item);
+		ILinkInfo^ CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link);
 	public:
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution);
 		virtual ~Document();
@@ -54,7 +49,8 @@ namespace MuPDFWinRT
 			int32 width, 
 			int32 height,
 			Platform::Boolean invert);
-		Windows::Foundation::Collections::IVector<MuPDFWinRT::OutlineItem^>^ GetOutline();
+		Windows::Foundation::Collections::IVector<OutlineItem^>^ GetOutline();
+		Windows::Foundation::Collections::IVector<ILinkInfo^>^ GetLinks();
 		property int32 PageCount
 		{
 			int32 get()

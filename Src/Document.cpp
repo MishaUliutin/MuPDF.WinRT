@@ -143,7 +143,7 @@ Point Document::GetPageSize(int pageNumber)
 	return size;
 }
 
-Windows::Foundation::Collections::IVector<MuPDFWinRT::OutlineItem^>^ Document::GetOutline()
+Windows::Foundation::Collections::IVector<OutlineItem^>^ Document::GetOutline()
 {
 	auto items = m_doc->GetOutline();
 	auto outlineItems = ref new Platform::Collections::Vector<MuPDFWinRT::OutlineItem^>();
@@ -159,4 +159,47 @@ MuPDFWinRT::OutlineItem^ Document::CreateOutlineItem(std::shared_ptr<Outlineitem
 {
 	auto title = Utilities::ConvertUTF8ToString(item->title.get());
 	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, title);
+}
+
+Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks()
+{
+	auto links = m_doc->GetLinks();
+	auto items = ref new Platform::Collections::Vector<ILinkInfo^>();
+	for(size_t i = 0; i < links->size(); i++)
+	{
+		auto linkInfo = CreateLinkInfo(links->at(i));
+		items->InsertAt(i, linkInfo);
+	}
+	return items;
+}
+
+ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
+{
+	ILinkInfo^ linkInfo;
+	RectF rect;
+	rect.Left = link->left;
+	rect.Top = link->top;
+	rect.Right = link->right;
+	rect.Bottom = link->bottom;
+	switch (link->type)
+	{
+	case INTERNAL:
+		{
+			linkInfo = ref new LinkInfoInternal(rect, link->internalPageNumber);
+			break;
+		}
+	case URI:
+		{
+			auto uri = Utilities::ConvertUTF8ToString(link->uri.get());
+			linkInfo = ref new LinkInfoURI(rect, uri);
+			break;
+		}
+	case REMOTE:
+		{
+			auto fileSpec = Utilities::ConvertUTF8ToString(link->fileSpec.get());
+			linkInfo = ref new LinkInfoRemote(rect, fileSpec, link->remotePageNumber, link->newWindow);
+			break;
+		}
+	};
+	return linkInfo;
 }

@@ -1,16 +1,16 @@
 // LinkInfoInternal.cpp
 
-#include "LinkInfoInternal.h"
+#include "LinkInfo.h"
 
 using namespace MuPDFWinRT;
 
-LinkInfoInternal::LinkInfoInternal(float32 left, float32 top, float32 right, float32 bottom, int32 pageNumber)
-	//: LinkInfo(left, top, right, bottom)
+LinkInfoInternal::LinkInfoInternal(RectF rect, int32 pageNumber)
 {
+	m_rect = rect;
 	m_pageNumber = pageNumber;
 }
 
-//void LinkInfoInternal::AcceptVisitor(MuPDFWinRT::LinkInfoVisitor^ visitor)
-//{
-//
-//}
+void LinkInfoInternal::AcceptVisitor(LinkInfoVisitor^ visitor)
+{
+	visitor->VisitInternal(this);
+}

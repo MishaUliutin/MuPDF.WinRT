@@ -10,17 +10,18 @@
     <ClCompile Include="..\Src\Document.cpp" />
     <ClCompile Include="..\Src\MuPDFDoc.cpp" />
     <ClCompile Include="..\Src\OutlineItem.cpp" />
-    <ClCompile Include="..\Src\LinkInfo.cpp" />
     <ClCompile Include="..\Src\LinkInfoInternal.cpp" />
     <ClCompile Include="..\Src\LinkInfoVisitor.cpp" />
+    <ClCompile Include="..\Src\LinkInfoRemote.cpp" />
+    <ClCompile Include="..\Src\LinkInfoURI.cpp" />
+    <ClCompile Include="..\Src\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Document.h" />
     <ClInclude Include="..\Src\Utilities.h" />
     <ClInclude Include="..\Src\MuPDFDoc.h" />
     <ClInclude Include="..\Src\OutlineItem.h" />
-    <ClInclude Include="..\Src\LinkInfoVisitor.h" />
     <ClInclude Include="..\Src\LinkInfo.h" />
-    <ClInclude Include="..\Src\LinkInfoInternal.h" />
+    <ClInclude Include="..\Src\RectF.h" />
   </ItemGroup>
 </Project>
