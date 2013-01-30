@@ -50,7 +50,8 @@ namespace MuPDFWinRT
 			int32 height,
 			Platform::Boolean invert);
 		Windows::Foundation::Collections::IVector<OutlineItem^>^ GetOutline();
-		Windows::Foundation::Collections::IVector<ILinkInfo^>^ GetLinks();
+		Windows::Foundation::Collections::IVector<ILinkInfo^>^ GetLinks(int32 pageNumber);
+		Windows::Foundation::Collections::IVector<RectF>^ SearchText(int32 pageNumber, Platform::String^ text);
 		property int32 PageCount
 		{
 			int32 get()

@@ -1,4 +1,5 @@
-#include <math.h>
+#include <cmath>
+#include <cctype>
 
 #include "MuPDFDoc.h"
 
@@ -730,3 +731,126 @@ fz_matrix MuPDFDoc::CalcConvertMatrix()
 //	}
 //	return S_OK;
 //}
+
+static int TextLen(fz_text_page *page)
+{
+	int len = 0;
+	for (fz_text_block *block = page->blocks; block < page->blocks + page->len; block++)
+	{
+		for (fz_text_line *line = block->lines; line < block->lines + block->len; line++)
+		{
+			for (fz_text_span *span = line->spans; span < line->spans + line->len; span++)
+				len += span->len;
+			len++; /* pseudo-newline */
+		}
+	}
+	return len;
+}
+
+static fz_text_char TextCharAt(fz_text_page *page, int idx)
+{
+	static fz_text_char emptychar = { {0,0,0,0}, ' ' };
+	int ofs = 0;
+	for (fz_text_block *block = page->blocks; block < page->blocks + page->len; block++)
+	{
+		for (fz_text_line *line = block->lines; line < block->lines + block->len; line++)
+		{
+			for (fz_text_span *span = line->spans; span < line->spans + line->len; span++)
+			{
+				if (idx < ofs + span->len)
+					return span->text[idx - ofs];
+				/* pseudo-newline */
+				if (span + 1 == line->spans + line->len)
+				{
+					if (idx == ofs + span->len)
+						return emptychar;
+					ofs++;
+				}
+				ofs += span->len;
+			}
+		}
+	}
+	return emptychar;
+}
+
+static int CharAt(fz_text_page *page, int idx)
+{
+	return TextCharAt(page, idx).c;
+}
+
+static int Match(fz_text_page *page, const char *str, int n)
+{
+	int orig = n;
+	int c;
+	while (*str) 
+	{
+		str += fz_chartorune(&c, (char *)str);
+		if (c == ' ' && CharAt(page, n) == ' ') 
+		{
+			while (CharAt(page, n) == ' ')
+				n++;
+		} 
+		else 
+		{
+			if (tolower(c) != tolower(CharAt(page, n)))
+				return 0;
+			n++;
+		}
+	}
+	return n - orig;
+}
+static fz_bbox BBoxCharAt(fz_text_page *page, int idx)
+{
+	return fz_round_rect(TextCharAt(page, idx).bbox);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> MuPDFDoc::SearchText(const char* searchText)
+{
+	fz_text_sheet *sheet = nullptr;
+	fz_text_page *text = nullptr;
+	fz_device *dev  = nullptr;
+	PageCache *pageCache = &m_pages[m_currentPage];
+	fz_var(sheet);
+	fz_var(text);
+	fz_var(dev);
+	std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> hints(new std::vector<std::shared_ptr<RectFloat>>());
+	fz_try(m_context)
+	{
+		int hitCount = 0;
+		fz_matrix ctm = CalcConvertMatrix();
+		fz_rect mbrect = fz_transform_rect(ctm, pageCache->mediaBox);
+		sheet = fz_new_text_sheet(m_context);
+		text = fz_new_text_page(m_context, mbrect);
+		dev = fz_new_text_device(m_context, sheet, text);
+		fz_run_page(m_document, pageCache->page, dev, ctm, nullptr);
+		fz_free_device(dev);
+		dev = nullptr;
+
+		int len = TextLen(text);
+		for (int pos = 0; pos < len; pos++)
+		{
+			fz_bbox rr = fz_empty_bbox;
+			int n = Match(text, searchText, pos);
+			for (int i = 0; i < n; i++)
+				rr = fz_union_bbox(rr, BBoxCharAt(text, pos + i));
+
+			if (!fz_is_empty_bbox(rr) && hitCount < MAX_SEARCH_HITS)
+			{
+				hints->push_back(std::shared_ptr<RectFloat>(new RectFloat(rr.x0, rr.y0, rr.x1, rr.y1)));
+				if (++hitCount >= MAX_SEARCH_HITS)
+					break;
+			}
+		}
+	}
+	fz_always(m_context)
+	{
+		fz_free_text_page(m_context, text);
+		fz_free_text_sheet(m_context, sheet);
+		fz_free_device(dev);
+	}
+	fz_catch(m_context)
+	{
+		return std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>>(nullptr);
+	}
+	return hints;
+}

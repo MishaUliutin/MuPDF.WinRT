@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <Winerror.h>
+
+#include "RectF.h"
 
 namespace Utilities
 {
@@ -13,4 +16,8 @@ namespace Utilities
 	}
 
 	Platform::String^ ConvertUTF8ToString(char* str);
+
+	std::unique_ptr<char[]> ConvertStringToUTF8(Platform::String^ string);
+
+	MuPDFWinRT::RectF CreateRectF(float left, float top, float right, float bottom);
 } 

@@ -12,6 +12,7 @@ extern "C" {
 
 
 #define NUM_CACHE (3)
+#define MAX_SEARCH_HITS (500)
 
 //TODO: Maybe I should change this to class/struct with default constructor
 typedef struct
@@ -135,5 +136,6 @@ public:
 	int GetPageWidth();
 	int GetPageHeight();
 	std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> GetLinks();
+	std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> SearchText(const char* text);
 	//HRESULT PassClickEvent(float x, float y, bool& changed);
 };

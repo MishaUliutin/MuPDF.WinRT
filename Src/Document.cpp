@@ -161,8 +161,9 @@ MuPDFWinRT::OutlineItem^ Document::CreateOutlineItem(std::shared_ptr<Outlineitem
 	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, title);
 }
 
-Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks()
+Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks(int32 pageNumber)
 {
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
 	auto links = m_doc->GetLinks();
 	auto items = ref new Platform::Collections::Vector<ILinkInfo^>();
 	for(size_t i = 0; i < links->size(); i++)
@@ -176,11 +177,7 @@ Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks()
 ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
 {
 	ILinkInfo^ linkInfo;
-	RectF rect;
-	rect.Left = link->left;
-	rect.Top = link->top;
-	rect.Right = link->right;
-	rect.Bottom = link->bottom;
+	RectF rect = Utilities::CreateRectF(link->left, link->top, link->right, link->bottom);
 	switch (link->type)
 	{
 	case INTERNAL:
@@ -202,4 +199,21 @@ ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
 		}
 	};
 	return linkInfo;
+}
+
+Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
+{
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
+	auto ut8Text = Utilities::ConvertStringToUTF8(text);
+	auto hints = m_doc->SearchText(ut8Text.get());
+	if (!hints)
+		throw ref new Platform::OutOfMemoryException();
+	auto items = ref new Platform::Collections::Vector<RectF, RectFEqual>();
+	for(size_t i = 0; i < hints->size(); i++)
+	{
+		auto hint = hints->at(i);
+		RectF rect = Utilities::CreateRectF(hint->left, hint->top, hint->right, hint->bottom);
+		items->InsertAt(i, rect);
+	}
+	return items;
 }
