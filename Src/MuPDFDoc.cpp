@@ -215,6 +215,10 @@ HRESULT MuPDFDoc::InitDocument(unsigned char *buffer, int bufferLen, const char 
 			m_outline = fz_load_outline(m_document);
 			//AlertsInit();
 		}
+		fz_always(m_context)
+		{
+			fz_close(stream);
+		}
 		fz_catch(m_context)
 		{
 			return E_INVALIDARG;
@@ -302,7 +306,6 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 		m_currentPage = index;
 		return S_OK;
 	}
-
 	index = GetPageCacheIndex(pageNumber);
 	m_currentPage = index;
 	PageCache *pageCache = &m_pages[m_currentPage];
@@ -319,8 +322,8 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 		// fz_bound_page determine the size of a page at 72 dpi.
 		fz_matrix ctm = CalcConvertMatrix();
 		fz_bbox bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
-		pageCache->width = bbox.x1-bbox.x0;
-		pageCache->height = bbox.y1-bbox.y0;
+		pageCache->width = bbox.x1 - bbox.x0;
+		pageCache->height = bbox.y1 - bbox.y0;
 	}
 	fz_catch(m_context)
 	{
@@ -418,13 +421,10 @@ HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int x, int y, int width, int h
 			fz_run_display_list(pageCache->pageList, dev, ctm, bbox, nullptr);
 		if (pageCache->annotList)
 			fz_run_display_list(pageCache->annotList, dev, ctm, bbox, nullptr);
-		fz_free_device(dev);
-		dev = nullptr;
 		if (invert)
 			fz_invert_pixmap(m_context, pixmap);
-		fz_drop_pixmap(m_context, pixmap);
 	}
-	fz_catch(m_context)
+	fz_always(m_context)
 	{
 		if (dev)
 		{
@@ -435,6 +435,9 @@ HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int x, int y, int width, int h
 		{
 			fz_drop_pixmap(m_context, pixmap);
 		}
+	}
+	fz_catch(m_context)
+	{
 		return E_FAIL;
 	}
 	return S_OK;
@@ -445,6 +448,7 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 	int index = FindPageInCache(pageNumber);
 	if (index < 0)
 	{
+		//TODO: get rid of this side effect!!!
 		HRESULT result = GotoPage(pageNumber);
 		if (FAILED(result))
 		{
@@ -524,9 +528,8 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 					fz_invert_pixmap_rect(pixmap, abox);
 			}
 		}
-		fz_drop_pixmap(m_context, pixmap);
 	}
-	fz_catch(m_context)
+	fz_always(m_context)
 	{
 		if (dev)
 		{
@@ -537,6 +540,9 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 		{
 			fz_drop_pixmap(m_context, pixmap);
 		}
+	}
+	fz_catch(m_context)
+	{
 		return E_FAIL;
 	}
 	return S_OK;
