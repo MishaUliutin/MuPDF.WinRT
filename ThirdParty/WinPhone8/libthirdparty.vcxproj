@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{472a2fd0-1a38-4929-83e8-fb010dc25b98}</ProjectGuid>
+    <RootNamespace>libthirdparty</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110_wp80</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110_wp80</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110_wp80</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110_wp80</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;OPJ_STATIC;FT_CONFIG_MODULES_H="slimftmodules.h";FT_CONFIG_OPTIONS_H="slimftoptions.h";DEBUG=1;verbose=-1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>..\mupdf\scripts;..\mupdf\thirdparty\jbig2dec;..\mupdf\thirdparty\jpeg;..\mupdf\thirdparty\openjpeg\libopenjpeg;..\mupdf\thirdparty\zlib;..\mupdf\thirdparty\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PreprocessorDefinitions>_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="Windows">
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="platform.winmd">
+      <IsWinMDFile>true</IsWinMDFile>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbase.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbbox.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftgasp.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftglyph.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftinit.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftstroke.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftsynth.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftsystem.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\fttype1.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftxf86.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\cff\cff.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\cid\type1cid.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\psaux\psaux.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\psnames\psnames.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\raster\raster.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\smooth\smooth.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\truetype\truetype.c" />
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\type1\type1.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith_iaid.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith_int.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_generic.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_halftone.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_huffman.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_image.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_metadata.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_mmr.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_page.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_refinement.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_segment.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_symbol_dict.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_text.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jaricom.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jcomapi.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdapimin.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdapistd.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdarith.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdatadst.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdatasrc.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdcoefct.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdcolor.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jddctmgr.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdhuff.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdinput.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmainct.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmarker.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmaster.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmerge.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdpostct.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdsample.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdtrans.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jerror.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctflt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctfst.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctint.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctflt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctfst.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctint.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jmemmgr.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jmemnobs.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jquant1.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jquant2.c" />
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jutils.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\bio.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\cidx_manager.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\cio.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\dwt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\event.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\image.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\j2k.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\j2k_lib.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\jp2.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\jpt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\mct.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\mqc.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\openjpeg.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\phix_manager.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\pi.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\ppix_manager.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\raw.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\t1.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\t2.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tcd.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tgt.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\thix_manager.c" />
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tpix_manager.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\adler32.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\compress.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\crc32.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\deflate.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inffast.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inflate.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inftrees.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\trees.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\uncompr.c" />
+    <ClCompile Include="..\mupdf\thirdparty\zlib\zutil.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftconfig.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftheader.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftmodule.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftoption.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftstdlib.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\freetype.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftadvanc.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbbox.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbdf.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbitmap.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbzip2.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftcache.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftchapters.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftcid.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fterrdef.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fterrors.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgasp.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftglyph.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgxval.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgzip.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftimage.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftincrem.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlcdfil.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlist.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlzw.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmac.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmm.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmodapi.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmoderr.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftotval.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftoutln.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftpfr.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftrender.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsizes.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsnames.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftstroke.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsynth.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsystem.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fttrigon.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fttypes.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftwinfnt.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftxf86.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\autohint.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftcalc.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftdebug.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftdriver.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftgloadr.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftmemory.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftobjs.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftpic.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftrfork.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftserv.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftstream.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\fttrace.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftvalid.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\internal.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\psaux.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\pshints.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svbdf.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svcid.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svgldict.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svgxval.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svkern.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svmm.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svotval.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpfr.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpostnm.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpscmap.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpsinfo.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svsfnt.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svttcmap.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svtteng.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svttglyf.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svwinfnt.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svxf86nm.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\sfnt.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\t1types.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\tttypes.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\t1tables.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ttnameid.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\tttables.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\tttags.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ttunpat.h" />
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\ft2build.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsPhone\v$(TargetPlatformVersion)\Microsoft.Cpp.WindowsPhone.$(TargetPlatformVersion).targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

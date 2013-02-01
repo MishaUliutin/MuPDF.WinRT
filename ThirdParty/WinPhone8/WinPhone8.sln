@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Phone
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmupdf", "libmupdf.vcxproj", "{6B263A1A-3462-4CDC-871A-D29E4EC90904}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmupdf-nov8", "libmupdf-nov8.vcxproj", "{72282C16-7DC4-4F9B-9216-4A7953946F1A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libthirdparty", "libthirdparty.vcxproj", "{472A2FD0-1A38-4929-83E8-FB010DC25B98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Release|ARM = Release|ARM
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B263A1A-3462-4CDC-871A-D29E4EC90904}.Debug|ARM.ActiveCfg = Debug|ARM
+		{6B263A1A-3462-4CDC-871A-D29E4EC90904}.Debug|ARM.Build.0 = Debug|ARM
+		{6B263A1A-3462-4CDC-871A-D29E4EC90904}.Release|ARM.ActiveCfg = Release|ARM
+		{6B263A1A-3462-4CDC-871A-D29E4EC90904}.Release|ARM.Build.0 = Release|ARM
+		{72282C16-7DC4-4F9B-9216-4A7953946F1A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{72282C16-7DC4-4F9B-9216-4A7953946F1A}.Debug|ARM.Build.0 = Debug|ARM
+		{72282C16-7DC4-4F9B-9216-4A7953946F1A}.Release|ARM.ActiveCfg = Release|ARM
+		{72282C16-7DC4-4F9B-9216-4A7953946F1A}.Release|ARM.Build.0 = Release|ARM
+		{472A2FD0-1A38-4929-83E8-FB010DC25B98}.Debug|ARM.ActiveCfg = Debug|ARM
+		{472A2FD0-1A38-4929-83E8-FB010DC25B98}.Debug|ARM.Build.0 = Debug|ARM
+		{472A2FD0-1A38-4929-83E8-FB010DC25B98}.Release|ARM.ActiveCfg = Release|ARM
+		{472A2FD0-1A38-4929-83E8-FB010DC25B98}.Release|ARM.Build.0 = Release|ARM
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
