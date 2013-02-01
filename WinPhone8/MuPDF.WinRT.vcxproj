@@ -63,7 +63,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalIncludeDirectories>C:\OpenSource\mupdf\fitz;C:\OpenSource\mupdf\pdf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ThirdParty\mupdf\fitz;..\ThirdParty\mupdf\pdf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
@@ -71,7 +71,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>ole32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
-      <AdditionalDependencies>C:\OpenSource\mupdf\win32\Debug\libthirdparty.lib;C:\OpenSource\mupdf\win32\Debug\libmupdf-nov8.lib;C:\OpenSource\mupdf\win32\Debug\libmupdf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\ThirdParty\mupdf\win32\Debug\libthirdparty.lib;..\ThirdParty\mupdf\win32\Debug\libmupdf-nov8.lib;..\ThirdParty\mupdf\win32\Debug\libmupdf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
