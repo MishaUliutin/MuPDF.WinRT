@@ -3,6 +3,7 @@
 #include <memory>
 #include <functional>
 #include <vector>
+
 #include <Winerror.h>
 
 extern "C" {
@@ -70,29 +71,6 @@ typedef struct
 	bool newWindow;	
 } MuPDFDocLink;
 
-///* Possible values of icon type */
-//enum  MuPDFAlertIconType { ALERTICONERROR, ALERTICONWARNING, ALERTICONQUESTION, ALERTICONSTATUS };
-//
-///* Possible values of button group type */
-//enum MuPDFAlertButtonGroupType { ALERTBUTTONGROUPOK, ALERTBUTTONGROUPOKCANCEL, ALERTBUTTONGROUPYESNO, ALERTBUTTONGROUPYESNOCANCEL };
-//
-///* Possible values of button pressed */
-//enum MuPDFAlertButtonPressed { ALERTBUTTONNONE, ALERTBUTTONOK, ALERTBUTTONCANCEL, ALERTBUTTONNO, ALERTBUTTONYES };
-//
-//typedef struct
-//{
-//	std::unique_ptr<char[]> message;
-//	MuPDFAlertIconType iconType;
-//	MuPDFAlertButtonGroupType buttonGroupType;
-//	std::unique_ptr<char[]> title;
-//	std::unique_ptr<char[]> checkBoxMessage;
-//	bool initiallyChecked;
-//	bool finallyChecked;
-//	MuPDFAlertButtonPressed buttonPressed;
-//} MuPDFAlertEvent;
-//
-//typedef std::function<void (std::shared_ptr<MuPDFAlertEvent>)> AlertEventCallback;
-
 class MuPDFDoc
 {
 private:
@@ -101,9 +79,9 @@ private:
 	fz_outline *m_outline;
 	int m_currentPage;
 	int m_resolution;
-	//AlertEventCallback m_alertEventCallback;
 	PageCache m_pages[NUM_CACHE];
 	MuPDFDoc(int resolution);
+	//MuPDFDoc(const MuPDFDoc& that) = delete;
 	HRESULT Init(unsigned char *buffer, int bufferLen, const char *mimeType);
 	HRESULT InitContext();
 	HRESULT InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType);
@@ -113,29 +91,21 @@ private:
 	int FindPageInCache(int pageNumber);
 	int GetPageCacheIndex(int pageNumber);
 	fz_matrix CalcConvertMatrix();
-//	int CountOutlineitems(fz_outline *outline);
 	int FillOutline(std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, int position, fz_outline *outline, int level);
-//	void DumpAnnotationDisplayLists();
-//	void ShowAlert(fz_alert_event* alert);
-//	void AlertsInit();
-//	static void EventCallback(fz_doc_event* event, void* data);
-//	void ClearHQPages();
 public:
 	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj);
-//	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, AlertEventCallback alertEventCallback, MuPDFDoc **obj);
 	~MuPDFDoc(void);
 	HRESULT GotoPage(int pageNumber);
 	HRESULT DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert);
 	HRESULT UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y, int width, int height, bool invert);
+	bool AuthenticatePassword(char *password);
 	inline int GetPageCount() { return fz_count_pages(m_document); }
 	inline bool JavaScriptSupported() { return fz_javascript_supported() != 0; }
 	inline bool NeedsPassword() { return fz_needs_password(m_document) != 0; }
-	bool AuthenticatePassword(char *password);
 	inline bool HasOutline() { return m_outline != nullptr; }
-	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> GetOutline();
 	int GetPageWidth();
 	int GetPageHeight();
 	std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> GetLinks();
 	std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> SearchText(const char* text);
-	//HRESULT PassClickEvent(float x, float y, bool& changed);
+	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> GetOutline();
 };

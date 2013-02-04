@@ -14,10 +14,10 @@ namespace MuPDFWinRT
 
 	struct RectFEqual : public std::binary_function<const RectF, const RectF, bool> 
 	{
-		bool operator()( const RectF& _Left,  const RectF& _Right ) const
+		bool operator()(const RectF& left,  const RectF& right ) const
 		{
-			return (_Left.Left == _Right.Left) && (_Left.Top == _Right.Top) &&
-				(_Left.Right == _Right.Right) && (_Left.Bottom == _Right.Bottom);
+			return (left.Left == right.Left) && (left.Top == right.Top) &&
+				(left.Right == right.Right) && (left.Bottom == right.Bottom);
 		};
 	};
 }

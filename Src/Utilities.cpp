@@ -1,4 +1,5 @@
 #include <memory>
+
 #include <Windows.h>
 
 #include "Utilities.h"

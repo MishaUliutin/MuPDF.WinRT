@@ -1,10 +1,12 @@
 ﻿// Document.cpp
+
+#include <vector>
+#include <memory>
+
 #include <Inspectable.h>
 #include <client.h>
 #include <Robuffer.h>
 #include <collection.h>
-#include <memory>
-#include <vector>
 
 #include "Document.h"
 #include "Utilities.h"
@@ -27,45 +29,6 @@ Document::~Document()
 	{
 		m_buffer = nullptr;
 	}
-}
-
-void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution)
-{
-	m_buffer = buffer;
-	unsigned char *data = GetPointerToData(buffer);
-	const char *type = GetMIMEType(documentType);
-	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, &m_doc));
-}
-
-const char *Document::GetMIMEType(DocumentType documentType)
-{
-	switch (documentType)
-	{
-	case DocumentType::PDF:
-		return "application/pdf";
-	case DocumentType::XPS:
-		return "application/vnd.ms-xpsdocument";
-	case MuPDFWinRT::DocumentType::CBZ:
-		return "application/x-cbz";
-	default:
-		return "application/pdf";
-	}
-}
-
-unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer)
-{
-	// Cast to Object^, then to its underlying IInspectable interface.
-	Object^ obj = buffer;
-	Microsoft::WRL::ComPtr<IInspectable> insp(reinterpret_cast<IInspectable*>(obj));
-
-	// Query the IBufferByteAccess interface.
-	Microsoft::WRL::ComPtr<Windows::Storage::Streams::IBufferByteAccess> bufferByteAccess;
-	Utilities::ThrowIfFailed(insp.As(&bufferByteAccess));
-
-	// Retrieve the buffer data.
-	unsigned char *data = nullptr;
-	Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&data));
-	return data;
 }
 
 Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution)
@@ -107,6 +70,28 @@ Platform::Boolean Document::AuthenticatePassword(Platform::String^ password)
 	return m_doc->AuthenticatePassword(ansiPassword.get());
 }
 
+Point Document::GetPageSize(int pageNumber)
+{
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
+	Point size;
+	size.X = m_doc->GetPageWidth();
+	size.Y = m_doc->GetPageHeight();
+	return size;
+}
+
+Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks(int32 pageNumber)
+{
+	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
+	auto links = m_doc->GetLinks();
+	auto items = ref new Platform::Collections::Vector<ILinkInfo^>();
+	for(size_t i = 0; i < links->size(); i++)
+	{
+		auto linkInfo = CreateLinkInfo(links->at(i));
+		items->InsertAt(i, linkInfo);
+	}
+	return items;
+}
+
 void Document::DrawPage(
 	int32 pageNumber, 
 	Windows::Storage::Streams::IBuffer^ bitmap, 
@@ -134,13 +119,21 @@ void Document::UpdatePage(
 	Utilities::ThrowIfFailed(m_doc->UpdatePage(pageNumber, buffer, x, y, width, height, invert));
 }
 
-Point Document::GetPageSize(int pageNumber)
+Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
 {
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	Point size;
-	size.X = m_doc->GetPageWidth();
-	size.Y = m_doc->GetPageHeight();
-	return size;
+	auto ut8Text = Utilities::ConvertStringToUTF8(text);
+	auto hints = m_doc->SearchText(ut8Text.get());
+	if (!hints)
+		throw ref new Platform::OutOfMemoryException();
+	auto items = ref new Platform::Collections::Vector<RectF, RectFEqual>();
+	for(size_t i = 0; i < hints->size(); i++)
+	{
+		auto hint = hints->at(i);
+		RectF rect = Utilities::CreateRectF(hint->left, hint->top, hint->right, hint->bottom);
+		items->InsertAt(i, rect);
+	}
+	return items;
 }
 
 Windows::Foundation::Collections::IVector<OutlineItem^>^ Document::GetOutline()
@@ -159,19 +152,6 @@ MuPDFWinRT::OutlineItem^ Document::CreateOutlineItem(std::shared_ptr<Outlineitem
 {
 	auto title = Utilities::ConvertUTF8ToString(item->title.get());
 	return ref new MuPDFWinRT::OutlineItem(item->pageNumber, item->level, title);
-}
-
-Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks(int32 pageNumber)
-{
-	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	auto links = m_doc->GetLinks();
-	auto items = ref new Platform::Collections::Vector<ILinkInfo^>();
-	for(size_t i = 0; i < links->size(); i++)
-	{
-		auto linkInfo = CreateLinkInfo(links->at(i));
-		items->InsertAt(i, linkInfo);
-	}
-	return items;
 }
 
 ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
@@ -201,19 +181,41 @@ ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
 	return linkInfo;
 }
 
-Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
+void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution)
 {
-	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	auto ut8Text = Utilities::ConvertStringToUTF8(text);
-	auto hints = m_doc->SearchText(ut8Text.get());
-	if (!hints)
-		throw ref new Platform::OutOfMemoryException();
-	auto items = ref new Platform::Collections::Vector<RectF, RectFEqual>();
-	for(size_t i = 0; i < hints->size(); i++)
+	m_buffer = buffer;
+	unsigned char *data = GetPointerToData(buffer);
+	const char *type = GetMIMEType(documentType);
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, &m_doc));
+}
+
+unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer)
+{
+	// Cast to Object^, then to its underlying IInspectable interface.
+	Object^ obj = buffer;
+	Microsoft::WRL::ComPtr<IInspectable> insp(reinterpret_cast<IInspectable*>(obj));
+
+	// Query the IBufferByteAccess interface.
+	Microsoft::WRL::ComPtr<Windows::Storage::Streams::IBufferByteAccess> bufferByteAccess;
+	Utilities::ThrowIfFailed(insp.As(&bufferByteAccess));
+
+	// Retrieve the buffer data.
+	unsigned char *data = nullptr;
+	Utilities::ThrowIfFailed(bufferByteAccess->Buffer(&data));
+	return data;
+}
+
+const char *Document::GetMIMEType(DocumentType documentType)
+{
+	switch (documentType)
 	{
-		auto hint = hints->at(i);
-		RectF rect = Utilities::CreateRectF(hint->left, hint->top, hint->right, hint->bottom);
-		items->InsertAt(i, rect);
+	case DocumentType::PDF:
+		return "application/pdf";
+	case DocumentType::XPS:
+		return "application/vnd.ms-xpsdocument";
+	case MuPDFWinRT::DocumentType::CBZ:
+		return "application/x-cbz";
+	default:
+		return "application/pdf";
 	}
-	return items;
 }

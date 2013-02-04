@@ -4,7 +4,7 @@
 #include "MuPDFDoc.h"
 
 MuPDFDoc::MuPDFDoc(int resolution)
-	: m_context(nullptr), m_document(nullptr), m_resolution(resolution), m_currentPage(-1)/*, m_alertEventCallback(nullptr)*/
+	: m_context(nullptr), m_document(nullptr), m_resolution(resolution), m_currentPage(-1)
 {
 	for(int i = 0; i < NUM_CACHE; i++)
 	{
@@ -18,36 +18,6 @@ MuPDFDoc::MuPDFDoc(int resolution)
 	}
 }
 
-HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj)
-{
-	MuPDFDoc *doc = new MuPDFDoc(resolution);
-	HRESULT result = doc->Init(buffer, bufferLen, mimeType);
-	if (FAILED(result))
-	{
-		delete doc;
-		return result;
-	}
-	else
-	{
-		*obj = doc;
-		return S_OK;
-	}
-}
-
-//HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, AlertEventCallback alertEventCallback, MuPDFDoc **obj)
-//{
-//	HRESULT result = Create(buffer, bufferLen, mimeType, resolution, obj);
-//	if (FAILED(result))
-//	{
-//		return result;
-//	}
-//	else
-//	{
-//		(*obj)->m_alertEventCallback = alertEventCallback;
-//		return S_OK;
-//	}
-//}
-//
 MuPDFDoc::~MuPDFDoc()
 {
 	if (m_outline)
@@ -68,235 +38,20 @@ MuPDFDoc::~MuPDFDoc()
 	}
 }
 
-HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeType)
+HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj)
 {
-	HRESULT result = InitContext();
+	MuPDFDoc *doc = new MuPDFDoc(resolution);
+	HRESULT result = doc->Init(buffer, bufferLen, mimeType);
 	if (FAILED(result))
 	{
+		delete doc;
 		return result;
 	}
 	else
 	{
-		result = InitDocument(buffer, bufferLen, mimeType);
-		return result;
-	}
-}
-
-HRESULT MuPDFDoc::InitContext()
-{
-	m_context = fz_new_context(nullptr, nullptr, FZ_STORE_DEFAULT);
-	if (!m_context)
-	{
-		return E_OUTOFMEMORY;
-	}
-	else
-	{
+		*obj = doc;
 		return S_OK;
 	}
-}
-//
-//static MuPDFAlertIconType GetMuPDFAlertIconType(int iconType)
-//{
-//	switch (iconType)
-//	{
-//	case FZ_ALERT_ICON_ERROR:
-//		return ALERTICONERROR;
-//	case FZ_ALERT_ICON_WARNING:
-//		return ALERTICONWARNING;
-//	case FZ_ALERT_ICON_QUESTION:
-//		return ALERTICONQUESTION;
-//	case FZ_ALERT_ICON_STATUS:
-//		return ALERTICONSTATUS;
-//	default:
-//		//!!!
-//		return (MuPDFAlertIconType)iconType;
-//	};
-//}
-//
-//static MuPDFAlertButtonGroupType GetMuPDFAlertButtonGroupType(int buttonGroupType)
-//{
-//	switch (buttonGroupType)
-//	{
-//	case FZ_ALERT_BUTTON_GROUP_OK:
-//		return ALERTBUTTONGROUPOK;
-//	case FZ_ALERT_BUTTON_GROUP_OK_CANCEL:
-//		return ALERTBUTTONGROUPOKCANCEL;
-//	case FZ_ALERT_BUTTON_GROUP_YES_NO:
-//		return ALERTBUTTONGROUPYESNO;
-//	case FZ_ALERT_BUTTON_GROUP_YES_NO_CANCEL:
-//		return ALERTBUTTONGROUPYESNOCANCEL;
-//	default:
-//		//!!!
-//		return (MuPDFAlertButtonGroupType)buttonGroupType;
-//	}
-//}
-//
-//static int GetButtonPressed(MuPDFAlertButtonPressed buttonPressed)
-//{
-//	switch (buttonPressed)
-//	{
-//	case ALERTBUTTONNONE:
-//		return FZ_ALERT_BUTTON_NONE;
-//	case ALERTBUTTONOK:
-//		return FZ_ALERT_BUTTON_OK;
-//	case ALERTBUTTONCANCEL:
-//		return FZ_ALERT_BUTTON_CANCEL;
-//	case ALERTBUTTONNO:
-//		return FZ_ALERT_BUTTON_NO;
-//	case ALERTBUTTONYES:
-//		return FZ_ALERT_BUTTON_YES;
-//	default:
-//		return (int)buttonPressed;
-//	}
-//}
-
-static std::unique_ptr<char[]> CopyToUniqueStr(char *str)
-{
-	size_t len = strlen(str);
-	std::unique_ptr<char[]> copyStr(new char[len + 1]);
-	strcpy_s(copyStr.get(), len + 1, str);
-	return copyStr;
-}
-
-//static std::shared_ptr<MuPDFAlertEvent> CreateMuPDFAlertEvent(const fz_alert_event* alert)
-//{
-//	std::shared_ptr<MuPDFAlertEvent> alertEvent(new MuPDFAlertEvent());
-//	alertEvent->message = CopyToUniqueStr(alert->message);
-//	alertEvent->iconType = GetMuPDFAlertIconType(alert->icon_type);
-//	alertEvent->buttonGroupType = GetMuPDFAlertButtonGroupType(alert->button_group_type);
-//	alertEvent->title = CopyToUniqueStr(alert->title);
-//	alertEvent->checkBoxMessage = CopyToUniqueStr(alert->check_box_message);
-//	alertEvent->initiallyChecked = alert->initially_checked == 0 ? false : true;
-//	return alertEvent;
-//}
-//
-//void MuPDFDoc::ShowAlert(fz_alert_event* alert)
-//{
-//	std::shared_ptr<MuPDFAlertEvent> alertEvent = CreateMuPDFAlertEvent(alert);
-//	if (m_alertEventCallback)
-//	{
-//		m_alertEventCallback(alertEvent);
-//		alert->finally_checked = alertEvent->finallyChecked;
-//		alert->button_pressed = GetButtonPressed(alertEvent->buttonPressed);		
-//	}
-//}
-//
-//void MuPDFDoc::EventCallback(fz_doc_event* event, void* data)
-//{
-//	MuPDFDoc* doc = (MuPDFDoc*)data;
-//	
-//	switch (event->type)
-//	{
-//	case FZ_DOCUMENT_EVENT_ALERT:
-//		doc->ShowAlert(fz_access_alert_event(event));
-//		break;
-//	}
-//}
-//
-//void MuPDFDoc::AlertsInit()
-//{
-//	fz_interactive* idoc = fz_interact(m_document);
-//	if (!idoc)
-//		return;
-//	fz_set_doc_event_callback(idoc, EventCallback, this);
-//}
-
-HRESULT MuPDFDoc::InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType)
-{
-	fz_stream *stream = OpenStream(buffer, bufferLen);
-	if (!stream)
-	{
-		return E_OUTOFMEMORY;
-	}
-	else
-	{
-		fz_try(m_context)
-		{
-			m_document = fz_open_document_with_stream(m_context, mimeType, stream);
-			m_outline = fz_load_outline(m_document);
-			//AlertsInit();
-		}
-		fz_always(m_context)
-		{
-			fz_close(stream);
-		}
-		fz_catch(m_context)
-		{
-			return E_INVALIDARG;
-		}
-		return S_OK;
-	}
-}
-
-fz_stream *MuPDFDoc::OpenStream(unsigned char *buffer, int bufferLen)
-{
-	fz_stream *stream = nullptr;
-	fz_try(m_context)
-	{
-		stream = fz_open_memory(m_context, buffer, bufferLen);
-	}
-	fz_catch(m_context)
-	{
-		return nullptr;
-	}
-	return stream;
-}
-
-void MuPDFDoc::ClearPages()
-{
-	for(int i = 0; i < NUM_CACHE; i++)
-	{
-		ClearPageCache(&m_pages[i]);
-	}
-}
-
-void MuPDFDoc::ClearPageCache(PageCache *pageCache)
-{
-	fz_free_display_list(m_context, pageCache->pageList);
-	pageCache->pageList = nullptr;
-	fz_free_display_list(m_context, pageCache->annotList);
-	pageCache->annotList = nullptr;
-	fz_free_page(m_document, pageCache->page);
-	pageCache->page = nullptr;
-	fz_free_page(m_document, pageCache->hqPage);
-	pageCache->hqPage = nullptr;
-}
-
-int MuPDFDoc::FindPageInCache(int pageNumber)
-{
-	for(int i = 0; i < NUM_CACHE; i++)
-	{
-		if (m_pages[i].page != NULL && m_pages[i].number == pageNumber)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-int MuPDFDoc::GetPageCacheIndex(int pageNumber)
-{
-	int furthest = 0;
-	int furthestDist = -1;
-	for (int i = 0; i < NUM_CACHE; i++)
-	{
-		if (m_pages[i].page == NULL)
-		{
-			/* cache record unused, and so a good one to use */
-			return i;
-		}
-		else
-		{
-			int dist = abs(m_pages[i].number - pageNumber);
-			/* Further away - less likely to be needed again */
-			if (dist > furthestDist)
-			{
-				furthestDist = dist;
-				furthest = i;
-			}
-		}
-	}
-	return furthest;
 }
 
 HRESULT MuPDFDoc::GotoPage(int pageNumber)
@@ -315,7 +70,6 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 	pageCache->width = 100;
 	pageCache->height = 100;
 	pageCache->number = pageNumber;
-
 	fz_try(m_context)
 	{
 		pageCache->page = fz_load_page(m_document, pageCache->number);
@@ -332,30 +86,6 @@ HRESULT MuPDFDoc::GotoPage(int pageNumber)
 	}
 	return S_OK;
 }
-
-int MuPDFDoc::GetPageWidth()
-{
-	return m_pages[m_currentPage].width;
-}
-
-int MuPDFDoc::GetPageHeight()
-{
-	return m_pages[m_currentPage].height;
-}
-
-bool MuPDFDoc::AuthenticatePassword(char *password)
-{
-	return fz_authenticate_password(m_document, password) != 0;
-}
-
-//void MuPDFDoc::ClearHQPages()
-//{
-//	for (int i = 0; i < NUM_CACHE; i++) 
-//	{
-//		fz_free_page(m_document, m_pages[i].hqPage);
-//		m_pages[i].hqPage = NULL;
-//	}
-//}
 
 HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert)
 {
@@ -510,7 +240,7 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 			dev = nullptr;
 		}
 		fz_annot *annot;
-		while (idoc && (annot = fz_poll_changed_annot(idoc, pageCache->page)) != NULL)
+		while (idoc && (annot = fz_poll_changed_annot(idoc, pageCache->page)))
 		{
 			fz_bbox abox = fz_round_rect(fz_transform_rect(ctm, fz_bound_annot(m_document, annot)));
 			abox = fz_intersect_bbox(abox, rect);
@@ -549,59 +279,27 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 	return S_OK;
 }
 
-//int MuPDFDoc::CountOutlineitems(fz_outline *outline)
-//{
-//	int count = 0;
-//
-//	while (outline)
-//	{
-//		if (outline->dest.kind == FZ_LINK_GOTO
-//				&& outline->dest.ld.gotor.page >= 0
-//				&& outline->title)
-//		{
-//			count++;
-//		}
-//		count += CountOutlineItems(outline->down);
-//		outline = outline->next;
-//	}
-//	return count;
-//}
-//
-
-int MuPDFDoc::FillOutline(
-	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, 
-	int position, 
-	fz_outline *outline, 
-	int level)
+bool MuPDFDoc::AuthenticatePassword(char *password)
 {
-	while (outline)
-	{
-		if (outline->dest.kind == FZ_LINK_GOTO)
-		{
-			int pageNumber = outline->dest.ld.gotor.page;
-			if (pageNumber >= 0 && outline->title)
-			{
-				std::shared_ptr<Outlineitem> item(new Outlineitem());
-				item->level = level;
-				item->pageNumber = pageNumber;
-				item->title = CopyToUniqueStr(outline->title);
-				items->push_back(item); 
-				position++;
-			}
-		}
-		position = FillOutline(items, position, outline->down, level + 1);
-		if (position < 0) 
-			return -1;
-		outline = outline->next;
-	}
-	return position;
+	return fz_authenticate_password(m_document, password) != 0;
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline()
+int MuPDFDoc::GetPageWidth()
 {
-	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items(new std::vector<std::shared_ptr<Outlineitem>>());
-	FillOutline(items, 0, m_outline, 0);
-	return items;
+	return m_pages[m_currentPage].width;
+}
+
+int MuPDFDoc::GetPageHeight()
+{
+	return m_pages[m_currentPage].height;
+}
+
+static std::unique_ptr<char[]> CopyToUniqueStr(char *str)
+{
+	size_t len = strlen(str);
+	std::unique_ptr<char[]> copyStr(new char[len + 1]);
+	strcpy_s(copyStr.get(), len + 1, str);
+	return copyStr;
 }
 
 static std::shared_ptr<MuPDFDocLink> CreateLink(const fz_rect &rect)
@@ -679,59 +377,6 @@ std::shared_ptr<std::vector<std::shared_ptr<MuPDFDocLink>>> MuPDFDoc::GetLinks()
 	return links;
 }
 
-fz_matrix MuPDFDoc::CalcConvertMatrix()
-{
-	// fz_bound_page determine the size of a page at 72 dpi.
-	float zoom = m_resolution / 72.0;
-	return fz_scale(zoom, zoom);
-}
-
-//void MuPDFDoc::DumpAnnotationDisplayLists()
-//{
-//	for (int i = 0; i < NUM_CACHE; i++)
-//	{
-//		if (m_pages[i].annotList)
-//		{
-//			fz_free_display_list(m_context, m_pages[i].annotList);
-//			m_pages[i].annotList = nullptr;
-//		}
-//	}
-//}
-//
-//HRESULT MuPDFDoc::PassClickEvent(float x, float y, bool& changed)
-//{
-//	changed = false;
-//	fz_interactive *idoc = fz_interact(m_document);
-//	if (!idoc)
-//		return S_OK;
-//	PageCache *pageCache = &m_pages[m_currentPage];	
-//	fz_matrix ctm = CalcConvertMatrix();
-//	ctm = fz_invert_matrix(ctm);
-//	fz_point p;
-//	p.x = x;
-//	p.y = y;
-//	p = fz_transform_point(ctm, p);
-//	fz_try(m_context)
-//	{
-//		fz_ui_event event;
-//		event.etype = FZ_EVENT_TYPE_POINTER;
-//		event.event.pointer.pt = p;
-//		event.event.pointer.ptype = FZ_POINTER_DOWN;
-//		changed = fz_pass_event(idoc, pageCache->page, &event) == 0 ? false : true;
-//		event.event.pointer.ptype = FZ_POINTER_UP;
-//		changed |= fz_pass_event(idoc, pageCache->page, &event) == 0 ? false : true;
-//		if (changed) 
-//		{
-//			DumpAnnotationDisplayLists();
-//		}
-//	}
-//	fz_catch(m_context)
-//	{
-//		return E_FAIL;
-//	}
-//	return S_OK;
-//}
-
 static int TextLen(fz_text_page *page)
 {
 	int len = 0;
@@ -799,6 +444,7 @@ static int Match(fz_text_page *page, const char *str, int n)
 	}
 	return n - orig;
 }
+
 static fz_bbox BBoxCharAt(fz_text_page *page, int idx)
 {
 	return fz_round_rect(TextCharAt(page, idx).bbox);
@@ -825,7 +471,6 @@ std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> MuPDFDoc::SearchText(co
 		fz_run_page(m_document, pageCache->page, dev, ctm, nullptr);
 		fz_free_device(dev);
 		dev = nullptr;
-
 		int len = TextLen(text);
 		for (int pos = 0; pos < len; pos++)
 		{
@@ -853,4 +498,172 @@ std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>> MuPDFDoc::SearchText(co
 		return std::shared_ptr<std::vector<std::shared_ptr<RectFloat>>>(nullptr);
 	}
 	return hints;
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline()
+{
+	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items(new std::vector<std::shared_ptr<Outlineitem>>());
+	FillOutline(items, 0, m_outline, 0);
+	return items;
+}
+
+HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeType)
+{
+	HRESULT result = InitContext();
+	if (FAILED(result))
+	{
+		return result;
+	}
+	else
+	{
+		result = InitDocument(buffer, bufferLen, mimeType);
+		return result;
+	}
+}
+
+HRESULT MuPDFDoc::InitContext()
+{
+	m_context = fz_new_context(nullptr, nullptr, FZ_STORE_DEFAULT);
+	if (!m_context)
+	{
+		return E_OUTOFMEMORY;
+	}
+	else
+	{
+		return S_OK;
+	}
+}
+
+HRESULT MuPDFDoc::InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType)
+{
+	fz_stream *stream = OpenStream(buffer, bufferLen);
+	if (!stream)
+	{
+		return E_OUTOFMEMORY;
+	}
+	else
+	{
+		fz_try(m_context)
+		{
+			m_document = fz_open_document_with_stream(m_context, mimeType, stream);
+			m_outline = fz_load_outline(m_document);
+			//AlertsInit();
+		}
+		fz_always(m_context)
+		{
+			fz_close(stream);
+		}
+		fz_catch(m_context)
+		{
+			return E_INVALIDARG;
+		}
+		return S_OK;
+	}
+}
+
+fz_stream *MuPDFDoc::OpenStream(unsigned char *buffer, int bufferLen)
+{
+	fz_stream *stream = nullptr;
+	fz_try(m_context)
+	{
+		stream = fz_open_memory(m_context, buffer, bufferLen);
+	}
+	fz_catch(m_context)
+	{
+		return nullptr;
+	}
+	return stream;
+}
+
+void MuPDFDoc::ClearPageCache(PageCache *pageCache)
+{
+	fz_free_display_list(m_context, pageCache->pageList);
+	pageCache->pageList = nullptr;
+	fz_free_display_list(m_context, pageCache->annotList);
+	pageCache->annotList = nullptr;
+	fz_free_page(m_document, pageCache->page);
+	pageCache->page = nullptr;
+	fz_free_page(m_document, pageCache->hqPage);
+	pageCache->hqPage = nullptr;
+}
+
+void MuPDFDoc::ClearPages()
+{
+	for(int i = 0; i < NUM_CACHE; i++)
+	{
+		ClearPageCache(&m_pages[i]);
+	}
+}
+
+int MuPDFDoc::FindPageInCache(int pageNumber)
+{
+	for(int i = 0; i < NUM_CACHE; i++)
+	{
+		if (m_pages[i].page && m_pages[i].number == pageNumber)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int MuPDFDoc::GetPageCacheIndex(int pageNumber)
+{
+	int furthest = 0;
+	int furthestDist = -1;
+	for (int i = 0; i < NUM_CACHE; i++)
+	{
+		if (!m_pages[i].page)
+		{
+			/* cache record unused, and so a good one to use */
+			return i;
+		}
+		else
+		{
+			int dist = abs(m_pages[i].number - pageNumber);
+			/* Further away - less likely to be needed again */
+			if (dist > furthestDist)
+			{
+				furthestDist = dist;
+				furthest = i;
+			}
+		}
+	}
+	return furthest;
+}
+
+int MuPDFDoc::FillOutline(
+	std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, 
+	int position, 
+	fz_outline *outline, 
+	int level)
+{
+	while (outline)
+	{
+		if (outline->dest.kind == FZ_LINK_GOTO)
+		{
+			int pageNumber = outline->dest.ld.gotor.page;
+			if (pageNumber >= 0 && outline->title)
+			{
+				std::shared_ptr<Outlineitem> item(new Outlineitem());
+				item->level = level;
+				item->pageNumber = pageNumber;
+				item->title = CopyToUniqueStr(outline->title);
+				items->push_back(item); 
+				position++;
+			}
+		}
+		position = FillOutline(items, position, outline->down, level + 1);
+		if (position < 0) 
+			return -1;
+		outline = outline->next;
+	}
+	return position;
+}
+
+fz_matrix MuPDFDoc::CalcConvertMatrix()
+{
+	// fz_bound_page determine the size of a page at 72 dpi.
+	float zoom = m_resolution / 72.0;
+	return fz_scale(zoom, zoom);
 }

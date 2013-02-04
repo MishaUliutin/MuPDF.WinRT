@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include <Winerror.h>
 
 #include "RectF.h"
