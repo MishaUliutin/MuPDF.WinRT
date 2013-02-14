@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
+#include <mutex>
 
 #include "OutlineItem.h"
 #include "MuPDFDoc.h"
@@ -20,6 +21,7 @@ namespace MuPDFWinRT
 	public ref class Document sealed
 	{    
 	private:
+		std::mutex m_lock; 
 		MuPDFDoc *m_doc;
 		Windows::Storage::Streams::IBuffer^ m_buffer;
 		Document();
@@ -56,6 +58,7 @@ namespace MuPDFWinRT
 		{
 			int32 get()
 			{
+				std::lock_guard<std::mutex> lock(m_lock);
 				return m_doc->GetPageCount();
 			}
 		}
@@ -63,6 +66,7 @@ namespace MuPDFWinRT
 		{
 			Platform::Boolean get()
 			{
+				std::lock_guard<std::mutex> lock(m_lock);
 				return m_doc->NeedsPassword();
 			}
 		}
@@ -70,14 +74,16 @@ namespace MuPDFWinRT
 		{
 			Platform::Boolean get()
 			{
-				return m_doc->JavaScriptSupported();
+				std::lock_guard<std::mutex> lock(m_lock);
+				return m_doc->NeedsPassword();
 			}
 		}
 		property Platform::Boolean HasOutline
 		{
 			Platform::Boolean get()
 			{
-				return m_doc->HasOutline();
+				std::lock_guard<std::mutex> lock(m_lock);
+				return m_doc->NeedsPassword();
 			}
 		}
 	};

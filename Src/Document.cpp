@@ -44,6 +44,7 @@ Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentT
 
 Platform::Boolean Document::AuthenticatePassword(Platform::String^ password)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	int ansiLength =  WideCharToMultiByte(
 		CP_ACP, 
 		0, 
@@ -72,6 +73,7 @@ Platform::Boolean Document::AuthenticatePassword(Platform::String^ password)
 
 Point Document::GetPageSize(int pageNumber)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
 	Point size;
 	size.X = m_doc->GetPageWidth();
@@ -81,6 +83,7 @@ Point Document::GetPageSize(int pageNumber)
 
 Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks(int32 pageNumber)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
 	auto links = m_doc->GetLinks();
 	auto items = ref new Platform::Collections::Vector<ILinkInfo^>();
@@ -101,6 +104,7 @@ void Document::DrawPage(
 	int32 height,
 	Platform::Boolean invert)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
 	auto buffer = GetPointerToData(bitmap);
 	Utilities::ThrowIfFailed(m_doc->DrawPage(buffer, x, y, width, height, invert));
@@ -115,12 +119,14 @@ void Document::UpdatePage(
 	int32 height,
 	Platform::Boolean invert)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	auto buffer = GetPointerToData(bitmap);
 	Utilities::ThrowIfFailed(m_doc->UpdatePage(pageNumber, buffer, x, y, width, height, invert));
 }
 
 Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
 	auto ut8Text = Utilities::ConvertStringToUTF8(text);
 	auto hints = m_doc->SearchText(ut8Text.get());
@@ -138,6 +144,7 @@ Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pag
 
 Windows::Foundation::Collections::IVector<OutlineItem^>^ Document::GetOutline()
 {
+	std::lock_guard<std::mutex> lock(m_lock);
 	auto items = m_doc->GetOutline();
 	auto outlineItems = ref new Platform::Collections::Vector<MuPDFWinRT::OutlineItem^>();
 	for(size_t i = 0; i < items->size(); i++)
