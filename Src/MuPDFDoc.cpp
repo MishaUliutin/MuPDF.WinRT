@@ -224,7 +224,7 @@ HRESULT MuPDFDoc::UpdatePage(int pageNumber, unsigned char *bitmap, int x, int y
 		rect.y0 = y;
 		rect.x1 = x + width;
 		rect.y1 = y + height;
-		pixmap = fz_new_pixmap_with_bbox_and_data(m_context, fz_device_rgb, rect, bitmap);
+		pixmap = fz_new_pixmap_with_bbox_and_data(m_context, fz_device_bgr, rect, bitmap);
 		//
 		fz_matrix ctm = CalcConvertMatrix();
 		fz_bbox bbox = fz_round_rect(fz_transform_rect(ctm, pageCache->mediaBox));
