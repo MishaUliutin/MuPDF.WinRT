@@ -126,7 +126,7 @@ HRESULT MuPDFDoc::DrawPage(unsigned char *bitmap, int x, int y, int width, int h
 		rect.y0 = y;
 		rect.x1 = x + width;
 		rect.y1 = y + height;
-		pixmap = fz_new_pixmap_with_bbox_and_data(m_context, fz_device_rgb, rect, bitmap);
+		pixmap = fz_new_pixmap_with_bbox_and_data(m_context, fz_device_bgr, rect, bitmap);
 		if (!pageCache->pageList && !pageCache->annotList)
 		{
 			fz_clear_pixmap_with_value(m_context, pixmap, 0xd0);

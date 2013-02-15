@@ -38,15 +38,7 @@ namespace MuPDFWinRT
 		Windows::Foundation::Collections::IVector<ILinkInfo^>^ GetLinks(int32 pageNumber);	
 		void DrawPage(
 			int32 pageNumber, 
-			Windows::Storage::Streams::IBuffer^ bitmap, 
-			int32 x, 
-			int32 y, 
-			int32 width, 
-			int32 height,
-			Platform::Boolean invert);
-		void UpdatePage(
-			int32 pageNumber, 
-			Windows::Storage::Streams::IBuffer^ bitmap, 
+			Platform::WriteOnlyArray<int>^ pixels, 
 			int32 x, 
 			int32 y, 
 			int32 width, 

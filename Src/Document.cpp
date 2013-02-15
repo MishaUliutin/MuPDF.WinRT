@@ -97,7 +97,7 @@ Windows::Foundation::Collections::IVector<ILinkInfo^>^ Document::GetLinks(int32 
 
 void Document::DrawPage(
 	int32 pageNumber, 
-	Windows::Storage::Streams::IBuffer^ bitmap, 
+	Platform::WriteOnlyArray<int>^ pixels, 
 	int32 x, 
 	int32 y, 
 	int32 width, 
@@ -106,22 +106,7 @@ void Document::DrawPage(
 {
 	std::lock_guard<std::mutex> lock(m_lock);
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	auto buffer = GetPointerToData(bitmap);
-	Utilities::ThrowIfFailed(m_doc->DrawPage(buffer, x, y, width, height, invert));
-}
-
-void Document::UpdatePage(
-	int32 pageNumber, 
-	Windows::Storage::Streams::IBuffer^ bitmap, 
-	int32 x, 
-	int32 y, 
-	int32 width, 
-	int32 height,
-	Platform::Boolean invert)
-{
-	std::lock_guard<std::mutex> lock(m_lock);
-	auto buffer = GetPointerToData(bitmap);
-	Utilities::ThrowIfFailed(m_doc->UpdatePage(pageNumber, buffer, x, y, width, height, invert));
+	Utilities::ThrowIfFailed(m_doc->DrawPage((unsigned char *)pixels->Data, x, y, width, height, invert));
 }
 
 Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
