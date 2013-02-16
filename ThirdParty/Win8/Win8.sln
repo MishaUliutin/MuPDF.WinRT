@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmupdf", "libmupdf.vcxproj", "{54F3C8F6-399D-41C1-AC43-15453D18CF11}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmupdf-nov8", "libmupdf-nov8.vcxproj", "{E1146269-178A-4083-ADEE-4E24447ADA0B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libthirdparty", "libthirdparty.vcxproj", "{5C3CF785-46AC-403D-8599-F444D79DFDE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|Win32 = Debug|Win32
+		Release|ARM = Release|ARM
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Debug|ARM.ActiveCfg = Debug|ARM
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Debug|ARM.Build.0 = Debug|ARM
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Debug|Win32.Build.0 = Debug|Win32
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Release|ARM.ActiveCfg = Release|ARM
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Release|ARM.Build.0 = Release|ARM
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Release|Win32.ActiveCfg = Release|Win32
+		{54F3C8F6-399D-41C1-AC43-15453D18CF11}.Release|Win32.Build.0 = Release|Win32
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Debug|ARM.Build.0 = Debug|ARM
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Debug|Win32.Build.0 = Debug|Win32
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Release|ARM.ActiveCfg = Release|ARM
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Release|ARM.Build.0 = Release|ARM
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Release|Win32.ActiveCfg = Release|Win32
+		{E1146269-178A-4083-ADEE-4E24447ADA0B}.Release|Win32.Build.0 = Release|Win32
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Debug|ARM.ActiveCfg = Debug|ARM
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Debug|ARM.Build.0 = Debug|ARM
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Debug|Win32.Build.0 = Debug|Win32
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Release|ARM.ActiveCfg = Release|ARM
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Release|ARM.Build.0 = Release|ARM
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Release|Win32.ActiveCfg = Release|Win32
+		{5C3CF785-46AC-403D-8599-F444D79DFDE8}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

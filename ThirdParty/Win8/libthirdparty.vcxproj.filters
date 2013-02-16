@@ -1,0 +1,594 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libfreetype">
+      <UniqueIdentifier>{02393c33-be52-43b5-9f58-a4b6fb6efd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\base">
+      <UniqueIdentifier>{8c74ed43-9a15-421e-83ca-1903ecb2b430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\include">
+      <UniqueIdentifier>{4be86d51-08b6-4701-a456-a94b0985c7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\include\freetype">
+      <UniqueIdentifier>{65c400a7-1666-4d79-8d20-1188db65e215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\include\freetype\config">
+      <UniqueIdentifier>{5cff4f07-747a-46ef-90d1-120d2dec7b7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\include\freetype\internal">
+      <UniqueIdentifier>{0e0bcee1-a92b-4e8f-936c-4b70fb73e364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libfreetype\include\freetype\internal\services">
+      <UniqueIdentifier>{96135b50-f293-4d4c-83df-fba1d600badf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libjbig2dec">
+      <UniqueIdentifier>{cfcbafa0-6094-42b7-b5a1-d97b6bd31bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libjpeg">
+      <UniqueIdentifier>{927641ed-fce4-4070-948a-244c1b1c8b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libopenjpeg">
+      <UniqueIdentifier>{026304a8-4a86-42a4-ba39-e5fa26822116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libz">
+      <UniqueIdentifier>{6aae5c3a-ebe4-4685-9c54-c50b106636a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbase.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbbox.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftbitmap.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftgasp.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftglyph.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftinit.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftstroke.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftsynth.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftsystem.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\fttype1.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\base\ftxf86.c">
+      <Filter>libfreetype\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\cff\cff.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\psaux\psaux.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\pshinter\pshinter.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\psnames\psnames.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\raster\raster.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\sfnt\sfnt.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\smooth\smooth.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\truetype\truetype.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\type1\type1.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\freetype\src\cid\type1cid.c">
+      <Filter>libfreetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith_iaid.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_arith_int.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_generic.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_halftone.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_huffman.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_image.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_metadata.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_mmr.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_page.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_refinement.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_segment.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_symbol_dict.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jbig2dec\jbig2_text.c">
+      <Filter>libjbig2dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jaricom.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jcomapi.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdapimin.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdapistd.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdarith.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdatadst.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdatasrc.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdcoefct.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdcolor.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jddctmgr.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdhuff.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdinput.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmainct.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmarker.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmaster.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdmerge.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdpostct.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdsample.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jdtrans.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jerror.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctflt.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctfst.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jfdctint.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctflt.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctfst.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jidctint.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jmemmgr.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jmemnobs.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jquant1.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jquant2.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\jpeg\jutils.c">
+      <Filter>libjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\bio.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\cidx_manager.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\cio.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\dwt.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\event.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\image.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\j2k.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\j2k_lib.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\jp2.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\jpt.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\mct.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\mqc.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\openjpeg.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\phix_manager.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\pi.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\ppix_manager.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\raw.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\t1.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\t2.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tcd.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tgt.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\thix_manager.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\openjpeg\libopenjpeg\tpix_manager.c">
+      <Filter>libopenjpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\adler32.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\compress.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\crc32.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\deflate.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inffast.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inflate.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\inftrees.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\trees.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\uncompr.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mupdf\thirdparty\zlib\zutil.c">
+      <Filter>libz</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftconfig.h">
+      <Filter>libfreetype\include\freetype\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftheader.h">
+      <Filter>libfreetype\include\freetype\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftmodule.h">
+      <Filter>libfreetype\include\freetype\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftoption.h">
+      <Filter>libfreetype\include\freetype\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\config\ftstdlib.h">
+      <Filter>libfreetype\include\freetype\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svbdf.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svcid.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svgldict.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svgxval.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svkern.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svmm.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svotval.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpfr.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpostnm.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpscmap.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svpsinfo.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svsfnt.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svttcmap.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svtteng.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svttglyf.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svwinfnt.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\services\svxf86nm.h">
+      <Filter>libfreetype\include\freetype\internal\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\autohint.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftcalc.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftdebug.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftdriver.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftgloadr.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftmemory.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftobjs.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftpic.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftrfork.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftserv.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftstream.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\fttrace.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\ftvalid.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\internal.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\psaux.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\pshints.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\sfnt.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\t1types.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\internal\tttypes.h">
+      <Filter>libfreetype\include\freetype\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\freetype.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftadvanc.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbbox.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbdf.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbitmap.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftbzip2.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftcache.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftchapters.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftcid.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fterrdef.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fterrors.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgasp.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftglyph.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgxval.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftgzip.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftimage.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftincrem.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlcdfil.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlist.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftlzw.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmac.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmm.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmodapi.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftmoderr.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftotval.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftoutln.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftpfr.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftrender.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsizes.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsnames.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftstroke.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsynth.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftsystem.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fttrigon.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\fttypes.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftwinfnt.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ftxf86.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\t1tables.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ttnameid.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\tttables.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\tttags.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\freetype\ttunpat.h">
+      <Filter>libfreetype\include\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mupdf\thirdparty\freetype\include\ft2build.h">
+      <Filter>libfreetype\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
