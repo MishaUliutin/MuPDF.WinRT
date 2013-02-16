@@ -36,9 +36,18 @@ namespace MuPDFWinRT
 		Platform::Boolean AuthenticatePassword(Platform::String^ password);
 		Point GetPageSize(int32 pageNumber);
 		Windows::Foundation::Collections::IVector<ILinkInfo^>^ GetLinks(int32 pageNumber);	
+		[Windows::Foundation::Metadata::DefaultOverload]
 		void DrawPage(
 			int32 pageNumber, 
 			Platform::WriteOnlyArray<int>^ pixels, 
+			int32 x, 
+			int32 y, 
+			int32 width, 
+			int32 height,
+			Platform::Boolean invert);
+		void DrawPage(
+			int32 pageNumber, 
+			Windows::Storage::Streams::IBuffer^ pixels, 
 			int32 x, 
 			int32 y, 
 			int32 width, 
