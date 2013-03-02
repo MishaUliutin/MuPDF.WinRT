@@ -76,7 +76,7 @@ namespace MuPDFWinRT
 			Platform::Boolean get()
 			{
 				std::lock_guard<std::mutex> lock(m_lock);
-				return m_doc->NeedsPassword();
+				return m_doc->JavaScriptSupported();
 			}
 		}
 		property Platform::Boolean HasOutline
@@ -84,7 +84,7 @@ namespace MuPDFWinRT
 			Platform::Boolean get()
 			{
 				std::lock_guard<std::mutex> lock(m_lock);
-				return m_doc->NeedsPassword();
+				return m_doc->HasOutline();
 			}
 		}
 	};
