@@ -41,33 +41,22 @@ Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentT
 	return document;
 }
 
+Document^ Document::Create(Platform::String^ fileName, DocumentType documentType, int32 resolution)
+{
+	if (!fileName)
+	{
+		throw ref new Platform::InvalidArgumentException(L"fileName");
+	}
+	Document^ document = ref new Document();
+	document->Init(fileName, documentType, resolution);
+	return document;
+}
+
 Platform::Boolean Document::AuthenticatePassword(Platform::String^ password)
 {
 	std::lock_guard<std::mutex> lock(m_lock);
-	int ansiLength =  WideCharToMultiByte(
-		CP_ACP, 
-		0, 
-		password->Data(), 
-		-1, 
-		nullptr, 
-		0, 
-		nullptr, 
-		nullptr);
-	if (ansiLength == 0)
-		throw ref new Platform::FailureException();
-	std::unique_ptr<char[]> ansiPassword(new char[ansiLength]);
-	ansiLength =  WideCharToMultiByte(
-		CP_ACP, 
-		0, 
-		password->Data(), 
-		-1, 
-		ansiPassword.get(),
-		ansiLength,
-		nullptr, 
-		nullptr);
-	if (ansiLength == 0)
-		throw ref new Platform::FailureException();
-	return m_doc->AuthenticatePassword(ansiPassword.get());
+	auto utf8Password = Utilities::ConvertStringToUTF8(password);
+	return m_doc->AuthenticatePassword(utf8Password.get());
 }
 
 Point Document::GetPageSize(int pageNumber)
@@ -193,6 +182,13 @@ void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType doc
 	unsigned char *data = GetPointerToData(buffer);
 	const char *type = GetMIMEType(documentType);
 	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, &m_doc));
+}
+
+void Document::Init(Platform::String^ fileName, DocumentType documentType, int resolution)
+{
+	const char *type = GetMIMEType(documentType);
+	auto ut8FileName = Utilities::ConvertStringToUTF8(fileName);
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(ut8FileName.get(), type, resolution, &m_doc));
 }
 
 unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer)

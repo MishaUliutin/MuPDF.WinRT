@@ -83,8 +83,11 @@ private:
 	MuPDFDoc(int resolution);
 	//MuPDFDoc(const MuPDFDoc& that) = delete;
 	HRESULT Init(unsigned char *buffer, int bufferLen, const char *mimeType);
+	HRESULT Init(const char *filename, const char *mimeType);
 	HRESULT InitContext();
 	HRESULT InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType);
+	HRESULT InitDocument(const char *filename, const char *mimeType);
+	HRESULT InitDocumentData();
 	fz_stream *OpenStream(unsigned char *buffer, int bufferLen);
 	void ClearPageCache(PageCache *pageCache);
 	void ClearPages();
@@ -94,6 +97,8 @@ private:
 	int FillOutline(std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, int position, fz_outline *outline, int level);
 public:
 	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj);
+	//UTF-8
+	static HRESULT Create(const char *filename, const char *mimeType, int resolution, MuPDFDoc **obj);
 	~MuPDFDoc(void);
 	HRESULT GotoPage(int pageNumber);
 	HRESULT DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert);

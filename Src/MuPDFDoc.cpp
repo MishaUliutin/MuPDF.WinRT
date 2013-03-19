@@ -54,6 +54,22 @@ HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeT
 	}
 }
 
+HRESULT MuPDFDoc::Create(const char *filename, const char *mimeType, int resolution, MuPDFDoc **obj)
+{
+	MuPDFDoc *doc = new MuPDFDoc(resolution);
+	HRESULT result = doc->Init(filename, mimeType);
+	if (FAILED(result))
+	{
+		delete doc;
+		return result;
+	}
+	else
+	{
+		*obj = doc;
+		return S_OK;
+	}
+}
+
 HRESULT MuPDFDoc::GotoPage(int pageNumber)
 {
 	int index = FindPageInCache(pageNumber);
@@ -521,6 +537,20 @@ HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeTyp
 	}
 }
 
+HRESULT MuPDFDoc::Init(const char *filename, const char *mimeType)
+{
+	HRESULT result = InitContext();
+	if (FAILED(result))
+	{
+		return result;
+	}
+	else
+	{
+		result = InitDocument(filename, mimeType);
+		return result;
+	}
+}
+
 HRESULT MuPDFDoc::InitContext()
 {
 	m_context = fz_new_context(nullptr, nullptr, FZ_STORE_DEFAULT);
@@ -546,8 +576,6 @@ HRESULT MuPDFDoc::InitDocument(unsigned char *buffer, int bufferLen, const char 
 		fz_try(m_context)
 		{
 			m_document = fz_open_document_with_stream(m_context, mimeType, stream);
-			m_outline = fz_load_outline(m_document);
-			//AlertsInit();
 		}
 		fz_always(m_context)
 		{
@@ -557,8 +585,59 @@ HRESULT MuPDFDoc::InitDocument(unsigned char *buffer, int bufferLen, const char 
 		{
 			return E_INVALIDARG;
 		}
-		return S_OK;
+		HRESULT result = InitDocumentData();
+		return result;
 	}
+}
+
+// Function definitions for opening document by file name but type selected by mimeType;
+// Copy from .\mupdf\fitz\doc_document.c
+extern "C" {
+/* Yuck! Promiscuous we are. */
+extern struct xps_document *xps_open_document(fz_context *ctx, const char *filename);
+extern struct cbz_document *cbz_open_document(fz_context *ctx, const char *filename);
+
+fz_document *fz_open_document_with_mimetype(fz_context *ctx, const char *filename, const char *mimeType)
+{
+	if (!strcmp(mimeType, "application/x-cbz"))
+		return (fz_document*)cbz_open_document(ctx, filename);
+	if (!strcmp(mimeType, "application/vnd.ms-xpsdocument"))
+		return (fz_document*)xps_open_document(ctx, filename);
+	if (!strcmp(mimeType, "application/pdf"))
+		return (fz_document*)pdf_open_document(ctx, filename);
+
+	/* last guess: pdf */
+	return (fz_document*)pdf_open_document(ctx, filename);
+}
+
+}
+
+HRESULT MuPDFDoc::InitDocument(const char *filename, const char *mimeType)
+{
+	fz_try(m_context)
+	{
+		m_document = fz_open_document_with_mimetype(m_context, filename, mimeType);
+	}
+	fz_catch(m_context)
+	{
+		return E_INVALIDARG;
+	}
+	HRESULT result = InitDocumentData();
+	return result;
+}
+
+HRESULT MuPDFDoc::InitDocumentData()
+{
+	fz_try(m_context)
+	{
+		m_outline = fz_load_outline(m_document);
+		//AlertsInit();
+	}
+	fz_catch(m_context)
+	{
+		return E_INVALIDARG;
+	}
+	return S_OK;
 }
 
 fz_stream *MuPDFDoc::OpenStream(unsigned char *buffer, int bufferLen)

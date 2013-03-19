@@ -28,10 +28,13 @@ namespace MuPDFWinRT
 		OutlineItem^ CreateOutlineItem(std::shared_ptr<Outlineitem> item);
 		ILinkInfo^ CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link);
 		void Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution);
+		void Init(Platform::String^ fileName, DocumentType documentType, int resolution);
 		unsigned char *GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer);
 		const char *GetMIMEType(DocumentType documentType);
 	public:
+		[Windows::Foundation::Metadata::DefaultOverload]
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution);
+		static Document^ Create(Platform::String^ fileName, DocumentType documentType, int32 resolution);
 		virtual ~Document();
 		Platform::Boolean AuthenticatePassword(Platform::String^ password);
 		Point GetPageSize(int32 pageNumber);
