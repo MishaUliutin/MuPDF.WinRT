@@ -21,3 +21,22 @@ Win8/Win32
 Win8/Generated Files
 
 
+ThirdParty/WinPhone8/*.user
+ThirdParty/WinPhone8/*.sdf
+ThirdParty/WinPhone8/*.suo
+ThirdParty/WinPhone8/*.opensdf
+ThirdParty/WinPhone8/Debug
+ThirdParty/WinPhone8/Release
+ThirdParty/WinPhone8/ARM
+ThirdParty/WinPhone8/Win32
+ThirdParty/WinPhone8/Generated Files
+
+ThirdParty/Win8/*.user
+ThirdParty/Win8/*.sdf
+ThirdParty/Win8/*.suo
+ThirdParty/Win8/*.opensdf
+ThirdParty/Win8/Debug
+ThirdParty/Win8/Release
+ThirdParty/Win8/ARM
+ThirdParty/Win8/Win32
+ThirdParty/Win8/Generated Files
