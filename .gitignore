@@ -5,5 +5,19 @@ WinPhone8/*.suo
 WinPhone8/*.opensdf
 WinPhone8/Debug
 WinPhone8/Release
+WinPhone8/ARM
+WinPhone8/Win32
 WinPhone8/Generated Files
+
+Win8/_ReSharper.MuPDF.WinRT
+Win8/*.user
+Win8/*.sdf
+Win8/*.suo
+Win8/*.opensdf
+Win8/Debug
+Win8/Release
+Win8/ARM
+Win8/Win32
+Win8/Generated Files
+
 
