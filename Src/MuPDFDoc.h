@@ -82,9 +82,9 @@ private:
 	PageCache m_pages[NUM_CACHE];
 	MuPDFDoc(int resolution);
 	//MuPDFDoc(const MuPDFDoc& that) = delete;
-	HRESULT Init(unsigned char *buffer, int bufferLen, const char *mimeType);
-	HRESULT Init(const char *filename, const char *mimeType);
-	HRESULT InitContext();
+	HRESULT Init(unsigned char *buffer, int bufferLen, const char *mimeType, unsigned int maxStore);
+	HRESULT Init(const char *filename, const char *mimeType, unsigned int maxStore);
+	HRESULT InitContext(unsigned int maxStore);
 	HRESULT InitDocument(unsigned char *buffer, int bufferLen, const char *mimeType);
 	HRESULT InitDocument(const char *filename, const char *mimeType);
 	HRESULT InitDocumentData();
@@ -96,9 +96,9 @@ private:
 	fz_matrix CalcConvertMatrix();
 	int FillOutline(std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> items, int position, fz_outline *outline, int level);
 public:
-	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj);
+	static HRESULT Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, unsigned int maxStore, MuPDFDoc **obj);
 	//UTF-8
-	static HRESULT Create(const char *filename, const char *mimeType, int resolution, MuPDFDoc **obj);
+	static HRESULT Create(const char *filename, const char *mimeType, int resolution, unsigned int maxStore, MuPDFDoc **obj);
 	~MuPDFDoc(void);
 	HRESULT GotoPage(int pageNumber);
 	HRESULT DrawPage(unsigned char *bitmap, int x, int y, int width, int height, bool invert);

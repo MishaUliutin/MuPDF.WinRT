@@ -38,10 +38,10 @@ MuPDFDoc::~MuPDFDoc()
 	}
 }
 
-HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, MuPDFDoc **obj)
+HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeType, int resolution, unsigned int maxStore, MuPDFDoc **obj)
 {
 	MuPDFDoc *doc = new MuPDFDoc(resolution);
-	HRESULT result = doc->Init(buffer, bufferLen, mimeType);
+	HRESULT result = doc->Init(buffer, bufferLen, mimeType, maxStore);
 	if (FAILED(result))
 	{
 		delete doc;
@@ -54,10 +54,10 @@ HRESULT MuPDFDoc::Create(unsigned char *buffer, int bufferLen, const char *mimeT
 	}
 }
 
-HRESULT MuPDFDoc::Create(const char *filename, const char *mimeType, int resolution, MuPDFDoc **obj)
+HRESULT MuPDFDoc::Create(const char *filename, const char *mimeType, int resolution, unsigned int maxStore, MuPDFDoc **obj)
 {
 	MuPDFDoc *doc = new MuPDFDoc(resolution);
-	HRESULT result = doc->Init(filename, mimeType);
+	HRESULT result = doc->Init(filename, mimeType, maxStore);
 	if (FAILED(result))
 	{
 		delete doc;
@@ -523,9 +523,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Outlineitem>>> MuPDFDoc::GetOutline(
 	return items;
 }
 
-HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeType)
+HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeType, unsigned int maxStore)
 {
-	HRESULT result = InitContext();
+	HRESULT result = InitContext(maxStore);
 	if (FAILED(result))
 	{
 		return result;
@@ -537,9 +537,9 @@ HRESULT MuPDFDoc::Init(unsigned char *buffer, int bufferLen, const char *mimeTyp
 	}
 }
 
-HRESULT MuPDFDoc::Init(const char *filename, const char *mimeType)
+HRESULT MuPDFDoc::Init(const char *filename, const char *mimeType, unsigned int maxStore)
 {
-	HRESULT result = InitContext();
+	HRESULT result = InitContext(maxStore);
 	if (FAILED(result))
 	{
 		return result;
@@ -551,9 +551,9 @@ HRESULT MuPDFDoc::Init(const char *filename, const char *mimeType)
 	}
 }
 
-HRESULT MuPDFDoc::InitContext()
+HRESULT MuPDFDoc::InitContext(unsigned int maxStore)
 {
-	m_context = fz_new_context(nullptr, nullptr, FZ_STORE_DEFAULT);
+	m_context = fz_new_context(nullptr, nullptr, maxStore);
 	if (!m_context)
 	{
 		return E_OUTOFMEMORY;

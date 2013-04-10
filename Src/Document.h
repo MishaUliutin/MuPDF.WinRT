@@ -27,14 +27,58 @@ namespace MuPDFWinRT
 		Document();
 		OutlineItem^ CreateOutlineItem(std::shared_ptr<Outlineitem> item);
 		ILinkInfo^ CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link);
-		void Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution);
-		void Init(Platform::String^ fileName, DocumentType documentType, int resolution);
+		void DrawPage(
+			int32 pageNumber, 
+			unsigned char *pixels, 
+			int32 x, 
+			int32 y, 
+			int32 width, 
+			int32 height,
+			Platform::Boolean invert);
+		void Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution, unsigned int maxStore);
+		void Init(Platform::String^ fileName, DocumentType documentType, int resolution, unsigned int maxStore);
 		unsigned char *GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer);
 		const char *GetMIMEType(DocumentType documentType);
 	public:
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
+        /// <param name="buffer">Buffer with document.</param>
+        /// <param name="documentType">Document type.</param>
+        /// <param name="resolution">Page bitmap dpi.</param>
+        /// <returns>Returns new instance of the <see cref="Document"/>.</returns>
 		[Windows::Foundation::Metadata::DefaultOverload]
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <param name="documentType">Document type.</param>
+        /// <param name="resolution">Page bitmap dpi.</param>
+        /// <returns>Returns new instance of the <see cref="Document"/>.</returns>
 		static Document^ Create(Platform::String^ fileName, DocumentType documentType, int32 resolution);
+
+		/// <summary>
+        /// Initializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
+        /// <param name="buffer">Buffer with document.</param>
+        /// <param name="documentType">Document type.</param>
+        /// <param name="resolution">Page bitmap dpi.</param>
+		/// <param name="maxStore">Maximum size in bytes of the resource store, before it will start evicting cached resources such as fonts and images. 0 (unlimited) can be used if a hard limit is not desired. Use default value (256MB) to get a reasonable size.</param>
+        /// <returns>Returns new instance of the <see cref="Document"/>.</returns>
+		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution, uint32 maxStore);
+
+		/// <summary>
+        /// Initializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <param name="documentType">Document type.</param>
+        /// <param name="resolution">Page bitmap dpi.</param>
+		/// <param name="maxStore">Maximum size in bytes of the resource store, before it will start evicting cached resources such as fonts and images. 0 (unlimited) can be used if a hard limit is not desired. Use default value (256MB) to get a reasonable size.</param>
+        /// <returns>Returns new instance of the <see cref="Document"/>.</returns>
+		static Document^ Create(Platform::String^ fileName, DocumentType documentType, int32 resolution, uint32 maxStore);
 		virtual ~Document();
 		Platform::Boolean AuthenticatePassword(Platform::String^ password);
 		Point GetPageSize(int32 pageNumber);

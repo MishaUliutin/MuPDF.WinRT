@@ -32,23 +32,33 @@ Document::~Document()
 
 Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution)
 {
+	return Create(buffer, documentType, resolution, FZ_STORE_DEFAULT);
+}
+
+Document^ Document::Create(Platform::String^ fileName, DocumentType documentType, int32 resolution)
+{
+	return Create(fileName, documentType, resolution, FZ_STORE_DEFAULT);
+}
+
+Document^ Document::Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution, uint32 maxStore)
+{
 	if (!buffer)
 	{
 		throw ref new Platform::InvalidArgumentException(L"buffer");
 	}
 	Document^ document = ref new Document();
-	document->Init(buffer, documentType, resolution);
+	document->Init(buffer, documentType, resolution, maxStore);
 	return document;
 }
 
-Document^ Document::Create(Platform::String^ fileName, DocumentType documentType, int32 resolution)
+Document^ Document::Create(Platform::String^ fileName, DocumentType documentType, int32 resolution, uint32 maxStore)
 {
 	if (!fileName)
 	{
 		throw ref new Platform::InvalidArgumentException(L"fileName");
 	}
 	Document^ document = ref new Document();
-	document->Init(fileName, documentType, resolution);
+	document->Init(fileName, documentType, resolution, maxStore);
 	return document;
 }
 
@@ -93,8 +103,7 @@ void Document::DrawPage(
 	Platform::Boolean invert)
 {
 	std::lock_guard<std::mutex> lock(m_lock);
-	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	Utilities::ThrowIfFailed(m_doc->DrawPage((unsigned char *)pixels->Data, x, y, width, height, invert));
+	DrawPage(pageNumber, (unsigned char *)pixels->Data, x, y, width, height, invert);
 }
 
 void Document::DrawPage(
@@ -108,8 +117,20 @@ void Document::DrawPage(
 {
 	std::lock_guard<std::mutex> lock(m_lock);
 	unsigned char *data = GetPointerToData(pixels);
+	DrawPage(pageNumber, data, x, y, width, height, invert);
+}
+
+void Document::DrawPage(
+	int32 pageNumber, 
+	unsigned char *pixels, 
+	int32 x, 
+	int32 y, 
+	int32 width, 
+	int32 height,
+	Platform::Boolean invert)
+{
 	Utilities::ThrowIfFailed(m_doc->GotoPage(pageNumber));
-	Utilities::ThrowIfFailed(m_doc->DrawPage(data, x, y, width, height, invert));
+	Utilities::ThrowIfFailed(m_doc->DrawPage(pixels, x, y, width, height, invert));
 }
 
 Windows::Foundation::Collections::IVector<RectF>^ Document::SearchText(int32 pageNumber, Platform::String^ text)
@@ -176,19 +197,19 @@ ILinkInfo^ Document::CreateLinkInfo(std::shared_ptr<MuPDFDocLink> link)
 	return linkInfo;
 }
 
-void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution)
+void Document::Init(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int resolution, unsigned int maxStore)
 {
 	m_buffer = buffer;
 	unsigned char *data = GetPointerToData(buffer);
 	const char *type = GetMIMEType(documentType);
-	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, &m_doc));
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(data, buffer->Length, type, resolution, maxStore, &m_doc));
 }
 
-void Document::Init(Platform::String^ fileName, DocumentType documentType, int resolution)
+void Document::Init(Platform::String^ fileName, DocumentType documentType, int resolution, unsigned int maxStore)
 {
 	const char *type = GetMIMEType(documentType);
 	auto ut8FileName = Utilities::ConvertStringToUTF8(fileName);
-	Utilities::ThrowIfFailed(MuPDFDoc::Create(ut8FileName.get(), type, resolution, &m_doc));
+	Utilities::ThrowIfFailed(MuPDFDoc::Create(ut8FileName.get(), type, resolution, maxStore, &m_doc));
 }
 
 unsigned char *Document::GetPointerToData(Windows::Storage::Streams::IBuffer^ buffer)
