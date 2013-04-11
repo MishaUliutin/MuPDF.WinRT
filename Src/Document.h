@@ -68,6 +68,7 @@ namespace MuPDFWinRT
         /// <param name="resolution">Page bitmap dpi.</param>
 		/// <param name="maxStore">Maximum size in bytes of the resource store, before it will start evicting cached resources such as fonts and images. 0 (unlimited) can be used if a hard limit is not desired. Use default value (256MB) to get a reasonable size.</param>
         /// <returns>Returns new instance of the <see cref="Document"/>.</returns>
+		[Windows::Foundation::Metadata::DefaultOverload]
 		static Document^ Create(Windows::Storage::Streams::IBuffer^ buffer, DocumentType documentType, int32 resolution, uint32 maxStore);
 
 		/// <summary>
